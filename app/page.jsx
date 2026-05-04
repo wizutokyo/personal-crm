@@ -225,9 +225,8 @@ function InputPage({ onConfirm, toast }) {
   const [memo, setMemo] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const examples = [
-    "5/2 りゅうと 25歳 営業、高井戸住み。挑戦したい気持ちはあるが何をしていいかわからない。知り合いの美容院へ案内し、5/20までに本を読む約束をした。",
-    "昨日 田中さつき 32歳 渋谷で出会い、マーケター。大阪出身。不動産を探していると言っていた。今度面談を設定する予定。",
+  const examples=[
+    "出会った日付：\n出会った場所：\n氏名：\n年齢：\n出身：\n住まい：\n学歴：\n仕事：\n詳細：",
   ];
 
   async function handleParse() {
@@ -252,7 +251,7 @@ function InputPage({ onConfirm, toast }) {
         <label style={S.label}>メモ・箇条書き</label>
         <textarea
           value={memo} onChange={(e) => setMemo(e.target.value)}
-          placeholder="例）5/2 りゅうと 25歳 営業、高井戸住み…"
+          placeholder="例）5/2 けいすけ 25歳 営業、渋谷住み…"
           style={{ ...S.input, minHeight: "160px", resize: "vertical", lineHeight: 1.7 }}
         />
         <div style={{ marginTop: "12px", display: "flex", justifyContent: "flex-end" }}>
