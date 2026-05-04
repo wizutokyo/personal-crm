@@ -60,7 +60,6 @@ const RT={
   beauty_salon:{label:"美容院",emoji:"✂️",color:"#f472b6"},
   hr:{label:"人材",emoji:"💼",color:"#60a5fa"},
   real_estate:{label:"不動産",emoji:"🏠",color:"#34d399"},
-  meeting:{label:"面談",emoji:"🤝",color:"#fbbf24"},
   book:{label:"本紹介",emoji:"📚",color:"#a78bfa"},
   person:{label:"人紹介",emoji:"👤",color:"#fb923c"},
 };
@@ -144,8 +143,8 @@ function InputPage({onConfirm,toast}){
   const [showKey,setShowKey]=useState(false);
 
   const examples=[
-    "出会った日付：\n出会った場所：\n氏名：\n年齢：\n出身：\n住まい：\n学歴：\n仕事：\n詳細："
-  ];
+  `出会った日付：\n出会った場所：\n氏名：\n年齢：\n出身：\n住まい：\n学歴：\n仕事：\n詳細：`,
+];
 
   function saveKey(){
     const k=keyIn.trim();
