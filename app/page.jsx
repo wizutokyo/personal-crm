@@ -196,7 +196,7 @@ function Nav({ page, setPage, overdueCount }) {
         color: C.accent, marginRight: "20px", letterSpacing: "-0.02em",
       }}>PCRM</div>
       {items.map((item) => (
-        <button key={item.id} onClick={() => setPage(item.id)} style={{
+        <button key={item.id} onClick={() => navTo(item.id)} style={{
           background: page === item.id ? C.accentDim : "transparent",
           color: page === item.id ? C.accent : C.muted,
           border: page === item.id ? `1px solid ${C.accentGlow}` : "1px solid transparent",
@@ -1128,7 +1128,11 @@ export default function App() {
     p.next_action && !p.next_action_done && p.next_action_due && new Date(p.next_action_due) < new Date()
   ).length;
 
-  function navTo(p) { setSubPage(null); setPage(p); }
+  function navTo(p) {
+  setSubPage(null);
+  setPage(p);
+  window.scrollTo(0, 0);
+}
 
   function handleAIParsed(data, memo) { setParsedData(data); setOrigMemo(memo); setSubPage("confirm"); }
 
