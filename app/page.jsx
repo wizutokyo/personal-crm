@@ -189,7 +189,7 @@ function Nav({ page, setPage, overdueCount }) {
       position: "sticky", top: 0, zIndex: 200,
       background: `${C.surface}ee`, backdropFilter: "blur(12px)",
       borderBottom: `1px solid ${C.border}`,
-      display: "flex", alignItems: "center", padding: "0 20px", height: "52px", gap: "4px",
+      display: "flex", alignItems: "center", padding: "0 8px", height: "52px", gap: "2px", overflowX: "auto", flexWrap: "nowrap",
     }}>
       <div style={{
         fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "15px",
