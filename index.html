@@ -1,1 +1,927 @@
-<!DOCTYPE html><html lang="ja"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/0n5iguj448f82.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/0ht900cau6_ur.js"/><script src="/_next/static/chunks/06~f4cvc3b8e~.js" async=""></script><script src="/_next/static/chunks/0n~dq4kpx9xxx.js" async=""></script><script src="/_next/static/chunks/turbopack-0cd6qyn3iwjya.js" async=""></script><script src="/_next/static/chunks/0dbhjjzl8qfwv.js" async=""></script><script src="/_next/static/chunks/00.26.iw~zsqk.js" async=""></script><link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" as="style"/><title>PersonalCRM</title><meta name="description" content="友人・知人との関係管理"/><link rel="icon" href="/favicon.ico?favicon.0x3dzn~oxb6tn.ico" sizes="256x256" type="image/x-icon"/><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/><script src="/_next/static/chunks/03~yq9q893hmn.js" noModule=""></script></head><body><div hidden=""><!--$--><!--/$--></div><div style="font-family:&#x27;Noto Sans JP&#x27;,&#x27;Syne&#x27;,sans-serif;background:#07080f;min-height:100vh;color:#e2e4f0"><nav style="position:sticky;top:0;z-index:200;background:#0e0f1aee;backdrop-filter:blur(12px);border-bottom:1px solid #252638;display:flex;align-items:center;padding:0 8px;height:52px;gap:2px;overflow-x:auto;flex-wrap:nowrap"><div style="font-family:&#x27;Syne&#x27;,sans-serif;font-weight:800;font-size:15px;color:#6366f1;margin-right:20px;letter-spacing:-0.02em">PCRM</div><button style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid rgba(99,102,241,0.3);border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px"><span style="font-size:14px">◈</span>ダッシュ</button><button style="background:transparent;color:#6b6d8a;border:1px solid transparent;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px"><span style="font-size:14px">+</span>新規入力</button><button style="background:transparent;color:#6b6d8a;border:1px solid transparent;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px"><span style="font-size:14px">⊞</span>人物一覧</button><button style="background:transparent;color:#6b6d8a;border:1px solid transparent;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px"><span style="font-size:14px">◎</span>アクション</button></nav><main><div style="padding:28px 24px;max-width:1100px;margin:0 auto"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px"><div><h2 style="font-family:&#x27;Syne&#x27;,sans-serif;font-size:22px;font-weight:800;margin:0 0 2px">ダッシュボード</h2><p style="color:#6b6d8a;font-size:13px;margin:0">2026<!-- -->年<!-- -->5<!-- -->月<!-- -->4<!-- -->日 現在</p></div><button style="background:#6366f1;color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">＋ 新規入力</button></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">総出会い数</div><div style="font-size:26px;font-weight:800;color:#e2e4f0;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">0</div><div style="font-size:10px;color:#40425a;margin-top:3px">人</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">送客人数</div><div style="font-size:26px;font-weight:800;color:#60a5fa;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">0</div><div style="font-size:10px;color:#40425a;margin-top:3px">人</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">面談獲得</div><div style="font-size:26px;font-weight:800;color:#fbbf24;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">0</div><div style="font-size:10px;color:#40425a;margin-top:3px">人</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">友達登録</div><div style="font-size:26px;font-weight:800;color:#22c55e;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">0</div><div style="font-size:10px;color:#40425a;margin-top:3px">人</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">NA設定</div><div style="font-size:26px;font-weight:800;color:#a78bfa;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">0</div><div style="font-size:10px;color:#40425a;margin-top:3px">人</div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">送客率</div><div style="font-size:26px;font-weight:800;color:#60a5fa;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">—</div><div style="font-size:10px;color:#40425a;margin-top:3px">送客÷出会い</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">着地率</div><div style="font-size:26px;font-weight:800;color:#34d399;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">—</div><div style="font-size:10px;color:#40425a;margin-top:3px">友達÷送客</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">面談率</div><div style="font-size:26px;font-weight:800;color:#fbbf24;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">—</div><div style="font-size:10px;color:#40425a;margin-top:3px">面談÷送客</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">出会い面談率</div><div style="font-size:26px;font-weight:800;color:#f472b6;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">—</div><div style="font-size:10px;color:#40425a;margin-top:3px">面談÷出会い</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px;flex:1 1 110px"><div style="font-size:10px;color:#6b6d8a;font-weight:700;letter-spacing:0.08em;margin-bottom:6px">NA率</div><div style="font-size:26px;font-weight:800;color:#a78bfa;line-height:1;font-family:&#x27;Syne&#x27;,sans-serif">—</div><div style="font-size:10px;color:#40425a;margin-top:3px">NA設定÷出会い</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px"><div style="font-size:13px;font-weight:700;margin-bottom:10px">月別推移（直近6ヶ月）</div><div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#6b6d8a"><span style="width:8px;height:8px;border-radius:2px;background:#6366f1;display:inline-block"></span>出会い</div><div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#6b6d8a"><span style="width:8px;height:8px;border-radius:2px;background:#34d399;display:inline-block"></span>送客</div><div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#6b6d8a"><span style="width:8px;height:8px;border-radius:2px;background:#fbbf24;display:inline-block"></span>面談</div><div style="display:flex;align-items:center;gap:3px;font-size:10px;color:#6b6d8a"><span style="width:8px;height:8px;border-radius:2px;background:#f472b6;display:inline-block"></span>友達登録</div></div><div style="display:flex;align-items:flex-end;gap:6px;height:90px"><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">12月</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">1月</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">2月</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">3月</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">4月</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center"><div style="width:100%;display:flex;gap:1px;align-items:flex-end;height:78px"><div style="flex:1;height:0px;background:#6366f1;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="出会い: 0"></div><div style="flex:1;height:0px;background:#34d399;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="送客: 0"></div><div style="flex:1;height:0px;background:#fbbf24;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="面談: 0"></div><div style="flex:1;height:0px;background:#f472b6;border-radius:2px 2px 0 0;min-height:0;opacity:0.85" title="友達登録: 0"></div></div><div style="font-size:10px;color:#40425a;margin-top:3px">5月</div></div></div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">場所別 着地率</div><div style="color:#40425a;font-size:13px">データなし</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">性別別 着地率</div><div style="color:#40425a;font-size:13px">データなし</div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:20px"><div style="font-size:13px;font-weight:700;margin-bottom:12px">送客先別 着地率</div><div style="color:#40425a;font-size:13px">データなし</div></div></div><div style="background:#0e0f1a;border:1px solid #252638;border-radius:14px;padding:60px;text-align:center;margin-top:16px"><div style="font-size:36px;margin-bottom:12px">✦</div><div style="font-weight:700;font-size:16px;margin-bottom:6px">まだデータがありません</div><div style="color:#6b6d8a;font-size:13px;margin-bottom:20px">最初の出会いを記録してみましょう</div><button style="background:#6366f1;color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">＋ 最初の人物を入力する</button></div></div></main></div><!--$--><!--/$--><script src="/_next/static/chunks/0ht900cau6_ur.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[39756,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"default\"]\n3:I[37457,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"default\"]\n4:I[47257,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"ClientPageRoot\"]\n5:I[29615,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\",\"/_next/static/chunks/00.26.iw~zsqk.js\"],\"default\"]\n8:I[97367,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"OutletBoundary\"]\n9:\"$Sreact.suspense\"\nb:I[97367,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"ViewportBoundary\"]\nd:I[97367,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"MetadataBoundary\"]\nf:I[68027,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"default\",1]\n:HL[\"/_next/static/chunks/0n5iguj448f82.css\",\"style\"]\n:HL[\"https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800\u0026family=Noto+Sans+JP:wght@400;500;700\u0026display=swap\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"c\":[\"\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/0n5iguj448f82.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/0dbhjjzl8qfwv.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"ja\",\"children\":[[\"$\",\"head\",null,{\"children\":[\"$\",\"link\",null,{\"href\":\"https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800\u0026family=Noto+Sans+JP:wght@400;500;700\u0026display=swap\",\"rel\":\"stylesheet\"}]}],[\"$\",\"body\",null,{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/00.26.iw~zsqk.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L8\",null,{\"children\":[\"$\",\"$9\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@a\"}]}]]}],{},null,false,null]},null,false,null],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Lb\",null,{\"children\":\"$Lc\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$Ld\",null,{\"children\":[\"$\",\"$9\",null,{\"name\":\"Next.Metadata\",\"children\":\"$Le\"}]}]}],null]}],false]],\"m\":\"$undefined\",\"G\":[\"$f\",[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/0n5iguj448f82.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]]],\"S\":true,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"gzbOl1cLnD2ctaw2_4jS3\"}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:1:children:0:props:children:0:props:serverProvidedParams:params\"\n"])</script><script>self.__next_f.push([1,"c:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])</script><script>self.__next_f.push([1,"10:I[27201,[\"/_next/static/chunks/0dbhjjzl8qfwv.js\"],\"IconMark\"]\na:null\ne:[[\"$\",\"title\",\"0\",{\"children\":\"PersonalCRM\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"友人・知人との関係管理\"}],[\"$\",\"link\",\"2\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.0x3dzn~oxb6tn.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"}],[\"$\",\"$L10\",\"3\",{}]]\n"])</script></body></html>
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PersonalCRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080f;--sf:#0e0f1a;--sf2:#151623;--sf3:#1c1d2e;
+  --bd:#252638;--bd2:#2e3048;
+  --ac:#6366f1;--ac-dim:rgba(99,102,241,0.12);--ac-glow:rgba(99,102,241,0.3);
+  --tx:#e2e4f0;--mu:#6b6d8a;--dim:#40425a;
+  --ok:#22c55e;--wa:#f59e0b;--er:#ef4444;
+}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+button,input,textarea,select{font-family:inherit}
+a{color:var(--ac)}
+nav{position:sticky;top:0;z-index:200;background:rgba(14,15,26,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;height:52px;gap:2px;overflow-x:auto}
+nav::-webkit-scrollbar{display:none}
+.nl{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--ac);margin-right:16px;white-space:nowrap;flex-shrink:0}
+.nb{background:transparent;color:var(--mu);border:1px solid transparent;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:4px;cursor:pointer;transition:all .15s}
+.nb.on{background:var(--ac-dim);color:var(--ac);border-color:var(--ac-glow)}
+.bdg{background:var(--er);color:#fff;border-radius:10px;font-size:9px;font-weight:800;padding:1px 5px}
+.pg{padding:24px 16px;max-width:800px;margin:0 auto}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:20px}
+.lbl{font-size:11px;color:var(--mu);font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px}
+.inp{background:var(--sf2);border:1px solid var(--bd2);border-radius:8px;padding:9px 13px;color:var(--tx);font-size:14px;width:100%;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--ac)}
+.btn{background:var(--ac);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btng{background:transparent;color:var(--mu);border:1px solid var(--bd2);border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer}
+.btnd{background:rgba(239,68,68,.1);color:var(--er);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.kc{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;flex:1 1 110px}
+.kl{font-size:10px;color:var(--mu);font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.kv{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1}
+.ks{font-size:10px;color:var(--dim);margin-top:3px}
+.fw{display:flex;flex-wrap:wrap;gap:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.g2{grid-template-columns:1fr}}
+.pr{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:6px}
+.av{width:38px;height:38px;border-radius:10px;background:var(--ac-dim);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--ac);flex-shrink:0}
+.dvdr{height:1px;background:var(--bd);margin:16px 0}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;right:16px;left:16px;max-width:400px;margin:0 auto;z-index:9999;background:var(--sf);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useCallback}=React;
+
+const RT={
+beauty_salon:{label:“美容院”,emoji:“✂️”,color:”#f472b6”},
+hr:{label:“人材”,emoji:“💼”,color:”#60a5fa”},
+real_estate:{label:“不動産”,emoji:“🏠”,color:”#34d399”},
+meeting:{label:“面談”,emoji:“🤝”,color:”#fbbf24”},
+book:{label:“本紹介”,emoji:“📚”,color:”#a78bfa”},
+person:{label:“人紹介”,emoji:“👤”,color:”#fb923c”},
+};
+const SC={
+active:{label:“アクティブ”,dot:”#22c55e”},
+pending:{label:“ペンディング”,dot:”#f59e0b”},
+completed:{label:“完了”,dot:”#60a5fa”},
+archived:{label:“アーカイブ”,dot:”#6b7280”},
+};
+const GL={male:“男性”,female:“女性”,other:“その他”};
+
+const DB={
+people:()=>{try{return JSON.parse(localStorage.getItem(“crm_p”)||”[]”)}catch{return[]}},
+refs:()=>{try{return JSON.parse(localStorage.getItem(“crm_r”)||”[]”)}catch{return[]}},
+sp:(d)=>localStorage.setItem(“crm_p”,JSON.stringify(d)),
+sr:(d)=>localStorage.setItem(“crm_r”,JSON.stringify(d)),
+};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+function cst(p){
+if(p.status===“completed”)return”completed”;
+if(p.status===“archived”)return”archived”;
+const r=p.last_contact_date?new Date(p.last_contact_date):new Date(p.created_at||Date.now());
+const d=Math.floor((Date.now()-r.getTime())/86400000);
+if(d>=90)return”archived”;
+if(d>=30)return”pending”;
+return”active”;
+}
+function buildPrompt(memo){
+const today=new Date().toISOString().split(“T”)[0];
+const year=new Date().getFullYear();
+return `以下のメモから人物情報を抽出し、JSONのみ返してください。説明文不要。\n\n今日: ${today}（年省略時は${year}年で補完）\n\nJSONスキーマ（不明はnull）:\n{\n  "name":string|null,"met_date":"YYYY-MM-DD"|null,"met_place":string|null,\n  "age":number|null,"gender":"male"|"female"|"other"|null,\n  "occupation":string|null,"residence":string|null,"university":string|null,\n  "hometown":string|null,"family_structure":string|null,"conversation":string|null,\n  "referral_types":["beauty_salon"|"hr"|"real_estate"|"meeting"|"book"|"person"],\n  "next_action":string|null,"next_action_due":"YYYY-MM-DD"|null,\n  "has_meeting":false,"meeting_date":"YYYY-MM-DD"|null,\n  "is_friend":false,"friended_date":"YYYY-MM-DD"|null,"notes":string|null\n}\n\n送客先: 美容院→beauty_salon, 転職/就職→hr, 不動産→real_estate, 面談/アポ→meeting, 本→book, 人紹介→person\n\nメモ:\n${memo}`;
+}
+async function callGemini(memo,key){
+const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`;
+const res=await fetch(url,{method:“POST”,headers:{“Content-Type”:“application/json”},body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{responseMimeType:“application/json”}})});
+if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`)}
+const d=await res.json();
+const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||””;
+return JSON.parse(t.replace(/`json|`/g,””).trim());
+}
+function spj(t){try{return JSON.parse(t.replace(/`json|`/g,””).trim())}catch{return null}}
+
+function Toast({msg,type}){
+if(!msg)return null;
+const c=type===“error”?“var(–er)”:“var(–ok)”;
+return <div className=“toast” style={{borderLeft:`3px solid ${c}`}}><span style={{color:c}}>{type===“error”?“✕”:“✓”}</span>{msg}</div>;
+}
+
+function Tag({type}){
+const c=RT[type];if(!c)return null;
+return <span className=“tag” style={{background:`${c.color}18`,color:c.color,border:`1px solid ${c.color}33`}}>{c.emoji} {c.label}</span>;
+}
+
+function Nav({page,setPage,od}){
+const items=[
+{id:“dashboard”,icon:“◈”,label:“ダッシュ”},
+{id:“input”,icon:”+”,label:“新規入力”},
+{id:“people”,icon:“⊞”,label:“人物一覧”},
+{id:“actions”,icon:“◎”,label:“アクション”,badge:od},
+];
+return(
+<nav>
+<div className="nl">PCRM</div>
+{items.map(it=>(
+<button key={it.id} className={`nb${page===it.id?" on":""}`} onClick={()=>setPage(it.id)}>
+{it.icon}{it.label}
+{it.badge>0&&<span className="bdg">{it.badge}</span>}
+</button>
+))}
+</nav>
+);
+}
+
+function InputPage({onConfirm,toast}){
+const [memo,setMemo]=useState(””);
+const [json,setJson]=useState(””);
+const [phase,setPhase]=useState(“write”);
+const [loading,setLoading]=useState(false);
+const [apiKey,setApiKey]=useState(()=>localStorage.getItem(“crm_gk”)||””);
+const [keyIn,setKeyIn]=useState(””);
+const [showKey,setShowKey]=useState(false);
+
+const examples=[
+“5/2 りゅうと 25歳 営業、高井戸住み。挑戦したい気持ちはあるが何をしていいかわからない。知り合いの美容院へ案内し、5/20までに本を読む約束をした。”,
+“昨日 田中さつき 32歳 渋谷で出会い、マーケター。大阪出身。不動産を探していると言っていた。今度面談を設定する予定。”,
+];
+
+function saveKey(){
+const k=keyIn.trim();
+if(!k){return}
+localStorage.setItem(“crm_gk”,k);
+setApiKey(k);setKeyIn(””);setShowKey(false);
+toast(“APIキーを保存しました”);
+}
+
+async function handleAI(){
+if(!memo.trim()||!apiKey)return;
+setLoading(true);
+try{
+const p=await callGemini(memo,apiKey);
+onConfirm(p,memo);
+}catch(e){
+const m=e.message||””;
+if(m.includes(“429”)||m.includes(“RESOURCE_EXHAUSTED”))toast(“本日の無料枠に達しました。明日リセットされます。”,“error”);
+else if(m.includes(“400”)||m.includes(“API_KEY”))toast(“APIキーが無効です。確認してください。”,“error”);
+else toast(“解析エラー: “+m,“error”);
+}finally{setLoading(false)}
+}
+
+function handleJSON(){
+const p=spj(json);
+if(!p){toast(“JSONが正しくありません。Claudeの出力をそのまま貼り付けてください。”,“error”);return}
+onConfirm(p,memo);
+}
+
+const hasKey=!!apiKey;
+const jsonOk=json.trim()&&!!spj(json);
+
+return(
+<div className="pg">
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800,marginBottom:4}}>新規入力</h2>
+<p style={{color:“var(–mu)”,fontSize:13,marginBottom:20}}>Gemini APIで自動解析 — 完全無料</p>
+
+```
+  {!hasKey&&!showKey&&(
+    <div className="card" style={{border:"1px solid var(--ac-glow)",background:"var(--ac-dim)",marginBottom:16}}>
+      <div style={{fontSize:13,fontWeight:700,color:"var(--ac)",marginBottom:6}}>Gemini APIキーを設定してください（無料）</div>
+      <div style={{fontSize:12,color:"var(--mu)",lineHeight:1.8,marginBottom:12}}>
+        <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> でGoogleアカウントでログインし「APIキーを作成」してください。クレジットカード不要です。
+      </div>
+      <button className="btn" onClick={()=>setShowKey(true)}>APIキーを入力する →</button>
+    </div>
+  )}
+  {showKey&&(
+    <div className="card" style={{marginBottom:16}}>
+      <label className="lbl">Gemini APIキー</label>
+      <div style={{display:"flex",gap:8,marginTop:4}}>
+        <input type="password" className="inp" style={{flex:1,fontFamily:"monospace",fontSize:13}} value={keyIn} onChange={e=>setKeyIn(e.target.value)} onKeyDown={e=>e.key==="Enter"&&saveKey()} placeholder="AIza..." autoFocus />
+        <button className="btn" onClick={saveKey} disabled={!keyIn.trim()}>保存</button>
+        <button className="btng" onClick={()=>setShowKey(false)}>キャンセル</button>
+      </div>
+    </div>
+  )}
+  {hasKey&&!showKey&&(
+    <div className="card" style={{marginBottom:16,padding:"10px 16px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <span style={{width:8,height:8,borderRadius:"50%",background:"var(--ok)",display:"inline-block"}}/>
+        <span style={{fontSize:12,color:"var(--mu)"}}>Gemini APIキー設定済み</span>
+      </div>
+      <div style={{display:"flex",gap:6}}>
+        <button className="btng btn-sm" onClick={()=>setShowKey(true)}>変更</button>
+        <button className="btnd btn-sm" onClick={()=>{localStorage.removeItem("crm_gk");setApiKey("");toast("APIキーを削除しました")}}>削除</button>
+      </div>
+    </div>
+  )}
+
+  <div style={{display:"flex",gap:8,marginBottom:16}}>
+    {["write","paste"].map((p,i)=>(
+      <div key={p} style={{display:"flex",alignItems:"center",gap:8}}>
+        {i>0&&<div style={{width:24,height:1,background:"var(--bd2)"}}/>}
+        <div style={{padding:"4px 14px",borderRadius:20,fontSize:12,fontWeight:700,
+          background:phase===p?"var(--ac-dim)":"var(--sf2)",
+          color:phase===p?"var(--ac)":"var(--mu)",
+          border:`1px solid ${phase===p?"var(--ac-glow)":"var(--bd2)"}`}}>
+          {p==="write"?"① メモを書く":"② JSONを貼る"}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {phase==="write"&&(
+    <>
+      <div className="card">
+        <label className="lbl">出会いのメモ・箇条書き</label>
+        <textarea className="inp" style={{minHeight:160}} value={memo} onChange={e=>setMemo(e.target.value)} placeholder="例）5/2 りゅうと 25歳 営業、高井戸住み…" />
+        <div style={{marginTop:12,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+          <span style={{fontSize:11,color:"var(--dim)"}}>
+            {hasKey?"AIで自動解析 または Claude.aiを使う":"↑ APIキーを設定してください"}
+          </span>
+          <div style={{display:"flex",gap:8}}>
+            <button className="btng" style={{fontSize:12}} onClick={()=>{
+              if(!memo.trim())return;
+              navigator.clipboard.writeText(buildPrompt(memo)).then(()=>{
+                window.open("https://claude.ai/new","_blank","noopener");
+                setPhase("paste");
+              }).catch(()=>{window.open("https://claude.ai/new","_blank","noopener");setPhase("paste")});
+            }} disabled={!memo.trim()}>Claude.aiで解析 →</button>
+            <button className="btn" disabled={!memo.trim()||!hasKey||loading} onClick={handleAI} style={{display:"flex",alignItems:"center",gap:8}}>
+              {loading?<><span className="spin"/>解析中…</>:"✦ AIで整理する"}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style={{marginTop:20}}>
+        <div style={{fontSize:11,color:"var(--dim)",fontWeight:700,letterSpacing:"0.08em",marginBottom:10}}>入力例（タップで挿入）</div>
+        {examples.map((ex,i)=>(
+          <button key={i} className="btng" style={{textAlign:"left",fontSize:12,color:"var(--mu)",lineHeight:1.6,padding:"10px 14px",width:"100%",marginBottom:8,display:"block"}} onClick={()=>setMemo(ex)}>{ex}</button>
+        ))}
+      </div>
+    </>
+  )}
+
+  {phase==="paste"&&(
+    <>
+      <div className="card" style={{background:"var(--ac-dim)",border:"1px solid var(--ac-glow)",marginBottom:14}}>
+        <div style={{fontSize:13,fontWeight:700,color:"var(--ac)",marginBottom:10}}>Claude.aiが開きました</div>
+        <div style={{fontSize:13,color:"var(--tx)",lineHeight:1.8,marginBottom:12}}>
+          <div>1. Claude.aiの新チャットにプロンプトを貼り付けて送信</div>
+          <div>2. 出力されたJSONを全部コピー</div>
+          <div>3. 下の欄に貼り付けて「確認画面へ」</div>
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <button className="btn" style={{fontSize:12,padding:"7px 14px"}} onClick={()=>window.open("https://claude.ai/new","_blank","noopener")}>Claude.aiを開く ↗</button>
+          <button className="btng" style={{fontSize:12,padding:"7px 14px"}} onClick={()=>{navigator.clipboard.writeText(buildPrompt(memo)).then(()=>toast("コピーしました")).catch(()=>{})}}>プロンプトを再コピー</button>
+          <button className="btng" style={{fontSize:12,padding:"7px 14px"}} onClick={()=>{setPhase("write");setJson("")}}>← メモを修正</button>
+        </div>
+      </div>
+      <div className="card">
+        <label className="lbl">ClaudeのJSON出力をここに貼り付け</label>
+        <textarea className="inp" style={{minHeight:160,fontFamily:"monospace",fontSize:12}} value={json} onChange={e=>setJson(e.target.value)} placeholder={'{\n  "name": "りゅうと",\n  ...\n}'} autoFocus />
+        {json&&!jsonOk&&<div style={{fontSize:11,color:"var(--er)",marginTop:6}}>JSONが正しくありません。Claudeの出力をそのまま貼り付けてください。</div>}
+        {jsonOk&&<div style={{fontSize:11,color:"var(--ok)",marginTop:6}}>✓ JSONを認識しました。</div>}
+        <div style={{marginTop:12,display:"flex",justifyContent:"flex-end"}}>
+          <button className="btn" disabled={!jsonOk} onClick={handleJSON}>確認画面へ →</button>
+        </div>
+      </div>
+    </>
+  )}
+</div>
+```
+
+);
+}
+
+function ConfirmPage({parsed,memo,onSave,onBack,toast}){
+const [f,setF]=useState({
+name:parsed.name||””,met_date:parsed.met_date||””,met_place:parsed.met_place||””,
+age:parsed.age||””,gender:parsed.gender||””,occupation:parsed.occupation||””,
+residence:parsed.residence||””,university:parsed.university||””,
+hometown:parsed.hometown||””,family_structure:parsed.family_structure||””,
+conversation:parsed.conversation||””,referral_types:parsed.referral_types||[],
+next_action:parsed.next_action||””,next_action_due:parsed.next_action_due||””,
+has_meeting:parsed.has_meeting||false,meeting_date:parsed.meeting_date||””,
+is_friend:parsed.is_friend||false,friended_date:parsed.friended_date||””,notes:parsed.notes||””,
+});
+const s=(k,v)=>setF(p=>({…p,[k]:v}));
+function tr(t){s(“referral_types”,f.referral_types.includes(t)?f.referral_types.filter(x=>x!==t):[…f.referral_types,t])}
+
+function TT({k,tl,fl,c}){
+const tc=c||“var(–ac)”;
+return(
+<div style={{display:“flex”,gap:6}}>
+{[true,false].map(v=>(
+<button key={String(v)} onClick={()=>s(k,v)} style={{flex:1,padding:8,borderRadius:8,fontSize:12,fontWeight:700,cursor:“pointer”,border:`1px solid ${f[k]===v?tc:"var(--bd2)"}`,background:f[k]===v?`rgba(99,102,241,0.12)`:“var(–sf2)”,color:f[k]===v?tc:“var(–mu)”}}>
+{v?tl:fl}
+</button>
+))}
+</div>
+);
+}
+
+return(
+<div className="pg">
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800,marginBottom:4}}>AI整理結果の確認</h2>
+<p style={{color:“var(–mu)”,fontSize:13,marginBottom:16}}>内容を確認・修正して保存してください</p>
+
+```
+  <div className="card" style={{background:"var(--sf2)",marginBottom:12,fontSize:12,color:"var(--mu)",lineHeight:1.7}}>
+    <div style={{fontSize:10,fontWeight:700,letterSpacing:"0.1em",color:"var(--dim)",marginBottom:6}}>元のメモ</div>
+    {memo}
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>基本情報</div>
+    <div className="g2">
+      {[["name","名前","text"],["met_date","出会った日","date"],["met_place","出会った場所","text"],["age","年齢","number"],["occupation","職業","text"],["residence","住まい","text"],["university","卒業大学","text"],["hometown","出身地","text"],["family_structure","家族構成","text"]].map(([k,l,t])=>(
+        <div key={k}>
+          <label className="lbl">{l}{k==="name"?" *":""}</label>
+          <input type={t} className="inp" value={f[k]||""} onChange={e=>s(k,e.target.value)} />
+        </div>
+      ))}
+      <div>
+        <label className="lbl">性別</label>
+        <select className="inp" value={f.gender} onChange={e=>s("gender",e.target.value)}>
+          <option value="">選択</option>
+          <option value="male">男性</option>
+          <option value="female">女性</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+    </div>
+    <div style={{marginTop:12}}>
+      <label className="lbl">会話内容</label>
+      <textarea className="inp" style={{minHeight:80}} value={f.conversation} onChange={e=>s("conversation",e.target.value)} />
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>送客先（複数選択可）</div>
+    <div className="fw">
+      {Object.entries(RT).map(([k,c])=>{
+        const on=f.referral_types.includes(k);
+        return <button key={k} onClick={()=>tr(k)} style={{padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",border:`1px solid ${on?c.color:"var(--bd2)"}`,background:on?`${c.color}20`:"var(--sf2)",color:on?c.color:"var(--mu)"}}>
+          {c.emoji} {c.label}
+        </button>;
+      })}
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>ネクストアクション</div>
+    <div className="g2">
+      <div><label className="lbl">内容</label><input className="inp" value={f.next_action} onChange={e=>s("next_action",e.target.value)} /></div>
+      <div><label className="lbl">期限</label><input type="date" className="inp" value={f.next_action_due} onChange={e=>s("next_action_due",e.target.value)} /></div>
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>面談・友達登録</div>
+    <div className="g2">
+      <div>
+        <label className="lbl">面談</label>
+        <TT k="has_meeting" tl="あり" fl="なし" />
+        {f.has_meeting&&<input type="date" className="inp" style={{marginTop:8}} value={f.meeting_date} onChange={e=>s("meeting_date",e.target.value)} />}
+      </div>
+      <div>
+        <label className="lbl">友達登録</label>
+        <TT k="is_friend" tl="済み" fl="未" c="var(--ok)" />
+        {f.is_friend&&<input type="date" className="inp" style={{marginTop:8}} value={f.friended_date} onChange={e=>s("friended_date",e.target.value)} />}
+      </div>
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:16}}>
+    <label className="lbl">備考</label>
+    <textarea className="inp" style={{minHeight:60}} value={f.notes} onChange={e=>s("notes",e.target.value)} />
+  </div>
+
+  <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+    <button className="btng" onClick={onBack}>← 戻る</button>
+    <button className="btn" onClick={()=>{if(!f.name.trim()){toast("名前は必須です","error");return}onSave(f)}}>✓ 確定して保存</button>
+  </div>
+</div>
+```
+
+);
+}
+
+function PeoplePage({people,refs,onSelect,onNew}){
+const [search,setSearch]=useState(””);
+const [fg,setFg]=useState(””);
+const [fs,setFs]=useState(””);
+const [fr,setFr]=useState(””);
+const filtered=useMemo(()=>people.filter(p=>{
+if(search&&!`${p.name||""} ${p.occupation||""} ${p.met_place||""}`.toLowerCase().includes(search.toLowerCase()))return false;
+if(fg&&p.gender!==fg)return false;
+if(fs&&cst(p)!==fs)return false;
+if(fr&&!refs.some(r=>r.person_id===p.id&&r.referral_type===fr))return false;
+return true;
+}),[people,refs,search,fg,fs,fr]);
+
+return(
+<div className="pg">
+<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“center”,marginBottom:16,flexWrap:“wrap”,gap:8}}>
+<div>
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800}}>人物一覧</h2>
+<p style={{color:“var(–mu)”,fontSize:13}}>{filtered.length}件 / 全{people.length}件</p>
+</div>
+<button className="btn" onClick={onNew}>＋ 新規入力</button>
+</div>
+<div className="fw" style={{marginBottom:16}}>
+<input className=“inp” style={{maxWidth:200}} value={search} onChange={e=>setSearch(e.target.value)} placeholder=“名前・職業・場所” />
+<select className=“inp” style={{maxWidth:110}} value={fg} onChange={e=>setFg(e.target.value)}>
+<option value="">性別</option>
+<option value="male">男性</option>
+<option value="female">女性</option>
+<option value="other">その他</option>
+</select>
+<select className=“inp” style={{maxWidth:140}} value={fs} onChange={e=>setFs(e.target.value)}>
+<option value="">ステータス</option>
+{Object.entries(SC).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}
+</select>
+<select className=“inp” style={{maxWidth:120}} value={fr} onChange={e=>setFr(e.target.value)}>
+<option value="">送客先</option>
+{Object.entries(RT).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}
+</select>
+</div>
+{filtered.length===0
+?<div className=“card” style={{textAlign:“center”,padding:60,color:“var(–mu)”}}>
+<div style={{fontSize:32,marginBottom:12}}>👤</div>
+<div style={{fontWeight:700}}>人物が見つかりません</div>
+</div>
+:filtered.map(p=>{
+const pr=refs.filter(r=>r.person_id===p.id);
+const st=cst(p);const sc=SC[st];
+const od=p.next_action&&!p.next_action_done&&p.next_action_due&&new Date(p.next_action_due)<new Date();
+return(
+<div key={p.id} className=“pr” onClick={()=>onSelect(p.id)} style={{borderColor:od?“rgba(239,68,68,0.4)”:“var(–bd)”}}>
+<div className="av">{(p.name||”?”)[0]}</div>
+<div style={{flex:1,minWidth:0}}>
+<div style={{display:“flex”,alignItems:“center”,gap:8,flexWrap:“wrap”,marginBottom:3}}>
+<span style={{fontWeight:700,fontSize:14}}>{p.name}</span>
+{p.age&&<span style={{fontSize:12,color:“var(–mu)”}}>{p.age}歳</span>}
+<span style={{display:“inline-flex”,alignItems:“center”,gap:4,fontSize:11,color:sc.dot}}>
+<span style={{width:6,height:6,borderRadius:“50%”,background:sc.dot,display:“inline-block”}}/>
+{sc.label}
+</span>
+{od&&<span className=“tag” style={{background:“rgba(239,68,68,0.12)”,color:“var(–er)”,border:“1px solid rgba(239,68,68,0.25)”,fontSize:10}}>期限切れ</span>}
+</div>
+<div style={{display:“flex”,gap:10,fontSize:12,color:“var(–mu)”,flexWrap:“wrap”}}>
+{p.occupation&&<span>💼 {p.occupation}</span>}
+{p.met_place&&<span>📍 {p.met_place}</span>}
+{p.met_date&&<span>📅 {p.met_date}</span>}
+</div>
+</div>
+<div style={{display:“flex”,gap:4,flexWrap:“wrap”,justifyContent:“flex-end”,maxWidth:160,flexShrink:0}}>
+{pr.map((r,i)=><Tag key={i} type={r.referral_type}/>)}
+{p.is_friend&&<span className="tag tag-friend">✓ 友達</span>}
+{p.has_meeting&&<span className="tag tag-meeting">面談</span>}
+</div>
+</div>
+);
+})
+}
+</div>
+);
+}
+
+function PersonDetail({pid,people,refs,onBack,onEdit,onDelete,onToggleNA}){
+const p=people.find(x=>x.id===pid);
+if(!p)return <div className=“pg” style={{color:“var(–mu)”}}>人物が見つかりません</div>;
+const pr=refs.filter(r=>r.person_id===p.id);
+const st=cst(p);const sc=SC[st];
+const od=p.next_action&&!p.next_action_done&&p.next_action_due&&new Date(p.next_action_due)<new Date();
+const rows=[[“出会った日”,p.met_date],[“出会った場所”,p.met_place],[“年齢”,p.age?`${p.age}歳`:null],[“性別”,GL[p.gender]],[“職業”,p.occupation],[“住まい”,p.residence],[“卒業大学”,p.university],[“出身地”,p.hometown],[“家族構成”,p.family_structure]].filter(([,v])=>v);
+
+return(
+<div className="pg">
+<button className="btng" style={{fontSize:12,marginBottom:16}} onClick={onBack}>← 一覧に戻る</button>
+<div className=“card” style={{display:“flex”,alignItems:“center”,gap:14,marginBottom:10,flexWrap:“wrap”}}>
+<div style={{width:52,height:52,borderRadius:13,background:“var(–ac-dim)”,display:“flex”,alignItems:“center”,justifyContent:“center”,fontSize:22,fontWeight:800,color:“var(–ac)”,fontFamily:”‘Syne’,sans-serif”,flexShrink:0}}>{(p.name||”?”)[0]}</div>
+<div style={{flex:1}}>
+<div style={{fontFamily:”‘Syne’,sans-serif”,fontSize:20,fontWeight:800}}>{p.name}</div>
+<div style={{display:“flex”,gap:8,marginTop:5,flexWrap:“wrap”}}>
+<span style={{display:“inline-flex”,alignItems:“center”,gap:5,fontSize:12,color:“var(–mu)”}}>
+<span style={{width:7,height:7,borderRadius:“50%”,background:sc.dot,display:“inline-block”}}/>
+{sc.label}
+</span>
+{pr.map((r,i)=><Tag key={i} type={r.referral_type}/>)}
+{p.is_friend&&<span className="tag tag-friend">✓ 友達登録</span>}
+{p.has_meeting&&<span className="tag tag-meeting">面談済</span>}
+</div>
+</div>
+<div style={{display:“flex”,gap:8,flexShrink:0}}>
+<button className="btng" onClick={onEdit}>編集</button>
+<button className=“btnd” onClick={()=>{if(window.confirm(`${p.name}を削除しますか？`))onDelete(p.id)}}>削除</button>
+</div>
+</div>
+
+```
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:11,fontWeight:700,color:"var(--ac)",marginBottom:12}}>基本情報</div>
+    <div className="g2">
+      {rows.map(([l,v])=>(
+        <div key={l}>
+          <div style={{fontSize:10,color:"var(--dim)",fontWeight:700,letterSpacing:"0.08em",marginBottom:2}}>{l}</div>
+          <div style={{fontSize:14}}>{v}</div>
+        </div>
+      ))}
+    </div>
+    {p.conversation&&<><div className="dvdr"/><div style={{fontSize:10,color:"var(--dim)",fontWeight:700,letterSpacing:"0.08em",marginBottom:6}}>会話内容</div><div style={{fontSize:13,lineHeight:1.8}}>{p.conversation}</div></>}
+  </div>
+
+  {p.next_action&&(
+    <div className="card" style={{marginBottom:10,borderColor:od?"rgba(239,68,68,0.44)":p.next_action_done?"rgba(34,197,94,0.33)":"var(--bd)"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:8}}>
+        <div style={{fontSize:11,fontWeight:700,color:od?"var(--er)":"var(--ac)"}}>{od?"⚠ 期限切れ":"ネクストアクション"}</div>
+        <button className="btng" style={{fontSize:11,padding:"4px 12px",color:p.next_action_done?"var(--ok)":"var(--mu)"}} onClick={()=>onToggleNA(p.id)}>
+          {p.next_action_done?"✓ 完了済み":"完了にする"}
+        </button>
+      </div>
+      <div style={{fontSize:14,color:p.next_action_done?"var(--mu)":"var(--tx)",textDecoration:p.next_action_done?"line-through":"none"}}>{p.next_action}</div>
+      {p.next_action_due&&<div style={{fontSize:12,color:od?"var(--er)":"var(--mu)",marginTop:4}}>期限: {p.next_action_due}</div>}
+    </div>
+  )}
+
+  {(p.has_meeting||p.is_friend||p.notes)&&(
+    <div className="card">
+      <div style={{display:"flex",gap:24,flexWrap:"wrap"}}>
+        {p.has_meeting&&<div><div style={{fontSize:10,color:"var(--dim)",fontWeight:700,marginBottom:2}}>面談日</div><div style={{fontSize:14,color:"#fbbf24"}}>{p.meeting_date||"未設定"}</div></div>}
+        {p.is_friend&&<div><div style={{fontSize:10,color:"var(--dim)",fontWeight:700,marginBottom:2}}>友達登録日</div><div style={{fontSize:14,color:"var(--ok)"}}>{p.friended_date||"未設定"}</div></div>}
+      </div>
+      {p.notes&&<><div className="dvdr"/><div style={{fontSize:10,color:"var(--dim)",fontWeight:700,marginBottom:6}}>備考</div><div style={{fontSize:13,color:"var(--mu)",lineHeight:1.8}}>{p.notes}</div></>}
+    </div>
+  )}
+</div>
+```
+
+);
+}
+
+function EditPage({pid,people,refs,onSave,onBack,toast}){
+const p=people.find(x=>x.id===pid);
+const pr=refs.filter(r=>r.person_id===pid);
+const [f,setF]=useState(()=>!p?{}:{
+name:p.name||””,met_date:p.met_date||””,met_place:p.met_place||””,age:p.age||””,
+gender:p.gender||””,occupation:p.occupation||””,residence:p.residence||””,
+university:p.university||””,hometown:p.hometown||””,family_structure:p.family_structure||””,
+conversation:p.conversation||””,referral_types:pr.map(r=>r.referral_type),
+next_action:p.next_action||””,next_action_due:p.next_action_due||””,
+next_action_done:p.next_action_done||false,
+has_meeting:p.has_meeting||false,meeting_date:p.meeting_date||””,
+is_friend:p.is_friend||false,friended_date:p.friended_date||””,
+status:p.status||“active”,notes:p.notes||””,
+});
+const s=(k,v)=>setF(x=>({…x,[k]:v}));
+function tr(t){s(“referral_types”,f.referral_types.includes(t)?f.referral_types.filter(x=>x!==t):[…f.referral_types,t])}
+if(!p)return null;
+
+return(
+<div className="pg">
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800,marginBottom:16}}>{p.name} を編集</h2>
+<div className="card" style={{marginBottom:10}}>
+<div style={{fontSize:12,fontWeight:700,color:“var(–ac)”,marginBottom:12}}>基本情報</div>
+<div className="g2">
+{[[“name”,“名前”,“text”],[“met_date”,“出会った日”,“date”],[“met_place”,“出会った場所”,“text”],[“age”,“年齢”,“number”],[“occupation”,“職業”,“text”],[“residence”,“住まい”,“text”],[“university”,“卒業大学”,“text”],[“hometown”,“出身地”,“text”],[“family_structure”,“家族構成”,“text”]].map(([k,l,t])=>(
+<div key={k}><label className="lbl">{l}</label><input type={t} className=“inp” value={f[k]||””} onChange={e=>s(k,e.target.value)}/></div>
+))}
+<div><label className="lbl">性別</label>
+<select className=“inp” value={f.gender} onChange={e=>s(“gender”,e.target.value)}>
+<option value="">選択</option><option value="male">男性</option><option value="female">女性</option><option value="other">その他</option>
+</select>
+</div>
+<div><label className="lbl">ステータス</label>
+<select className=“inp” value={f.status} onChange={e=>s(“status”,e.target.value)}>
+{Object.entries(SC).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}
+</select>
+</div>
+</div>
+<div style={{marginTop:12}}><label className="lbl">会話内容</label><textarea className=“inp” style={{minHeight:80}} value={f.conversation} onChange={e=>s(“conversation”,e.target.value)}/></div>
+</div>
+
+```
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>送客先</div>
+    <div className="fw">
+      {Object.entries(RT).map(([k,c])=>{
+        const on=f.referral_types.includes(k);
+        return <button key={k} onClick={()=>tr(k)} style={{padding:"6px 14px",borderRadius:20,fontSize:12,fontWeight:700,cursor:"pointer",border:`1px solid ${on?c.color:"var(--bd2)"}`,background:on?`${c.color}20`:"var(--sf2)",color:on?c.color:"var(--mu)"}}>
+          {c.emoji} {c.label}
+        </button>;
+      })}
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>ネクストアクション</div>
+    <div className="g2">
+      <div><label className="lbl">内容</label><input className="inp" value={f.next_action} onChange={e=>s("next_action",e.target.value)}/></div>
+      <div><label className="lbl">期限</label><input type="date" className="inp" value={f.next_action_due} onChange={e=>s("next_action_due",e.target.value)}/></div>
+    </div>
+    <div style={{marginTop:10,display:"flex",alignItems:"center",gap:8}}>
+      <input type="checkbox" id="nad" checked={f.next_action_done} onChange={e=>s("next_action_done",e.target.checked)}/>
+      <label htmlFor="nad" style={{fontSize:13,color:"var(--mu)",cursor:"pointer"}}>完了済み</label>
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:10}}>
+    <div style={{fontSize:12,fontWeight:700,color:"var(--ac)",marginBottom:12}}>面談・友達登録</div>
+    <div className="g2">
+      <div>
+        <label className="lbl">面談</label>
+        <div style={{display:"flex",gap:6,marginBottom:8}}>
+          {[true,false].map(v=><button key={String(v)} onClick={()=>s("has_meeting",v)} style={{flex:1,padding:7,borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer",border:`1px solid ${f.has_meeting===v?"var(--ac)":"var(--bd2)"}`,background:f.has_meeting===v?"var(--ac-dim)":"var(--sf2)",color:f.has_meeting===v?"var(--ac)":"var(--mu)"}}>{v?"あり":"なし"}</button>)}
+        </div>
+        {f.has_meeting&&<input type="date" className="inp" value={f.meeting_date} onChange={e=>s("meeting_date",e.target.value)}/>}
+      </div>
+      <div>
+        <label className="lbl">友達登録</label>
+        <div style={{display:"flex",gap:6,marginBottom:8}}>
+          {[true,false].map(v=><button key={String(v)} onClick={()=>s("is_friend",v)} style={{flex:1,padding:7,borderRadius:7,fontSize:12,fontWeight:700,cursor:"pointer",border:`1px solid ${f.is_friend===v?"var(--ok)":"var(--bd2)"}`,background:f.is_friend===v?"rgba(34,197,94,0.1)":"var(--sf2)",color:f.is_friend===v?"var(--ok)":"var(--mu)"}}>{v?"済み":"未"}</button>)}
+        </div>
+        {f.is_friend&&<input type="date" className="inp" value={f.friended_date} onChange={e=>s("friended_date",e.target.value)}/>}
+      </div>
+    </div>
+  </div>
+
+  <div className="card" style={{marginBottom:16}}><label className="lbl">備考</label><textarea className="inp" style={{minHeight:60}} value={f.notes} onChange={e=>s("notes",e.target.value)}/></div>
+  <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+    <button className="btng" onClick={onBack}>キャンセル</button>
+    <button className="btn" onClick={()=>{if(!f.name.trim()){toast("名前は必須です","error");return}onSave(pid,f)}}>保存する</button>
+  </div>
+</div>
+```
+
+);
+}
+
+function ActionsPage({people,onSelect,onToggleNA}){
+const od=people.filter(p=>p.next_action&&!p.next_action_done&&p.next_action_due&&new Date(p.next_action_due)<new Date()).sort((a,b)=>new Date(a.next_action_due)-new Date(b.next_action_due));
+const pend=people.filter(p=>p.next_action&&!p.next_action_done&&(!p.next_action_due||new Date(p.next_action_due)>=new Date())).sort((a,b)=>!a.next_action_due?1:!b.next_action_due?-1:new Date(a.next_action_due)-new Date(b.next_action_due));
+const done=people.filter(p=>p.next_action&&p.next_action_done);
+
+function Row({p,type}){
+const dov=p.next_action_due?Math.floor((Date.now()-new Date(p.next_action_due).getTime())/86400000):0;
+return(
+<div className=“pr” onClick={()=>onSelect(p.id)} style={{borderColor:type===“od”?“rgba(239,68,68,0.44)”:“var(–bd)”}}>
+<div className="av">{(p.name||”?”)[0]}</div>
+<div style={{flex:1,minWidth:0}}>
+<div style={{fontWeight:700,fontSize:13,marginBottom:2}}>{p.name}</div>
+<div style={{fontSize:12,color:type===“done”?“var(–dim)”:“var(–mu)”,textDecoration:type===“done”?“line-through”:“none”,overflow:“hidden”,textOverflow:“ellipsis”,whiteSpace:“nowrap”}}>{p.next_action}</div>
+</div>
+<div style={{textAlign:“right”,flexShrink:0}}>
+{p.next_action_due&&<div style={{fontSize:11,color:type===“od”?“var(–er)”:“var(–mu)”,fontWeight:type===“od”?700:400}}>{p.next_action_due}{type===“od”?` (+${dov}日)`:””}</div>}
+<button className=“btng” style={{fontSize:11,padding:“3px 10px”,marginTop:4,color:p.next_action_done?“var(–ok)”:“var(–mu)”}} onClick={e=>{e.stopPropagation();onToggleNA(p.id)}}>{p.next_action_done?“✓ 完了”:“完了にする”}</button>
+</div>
+</div>
+);
+}
+
+return(
+<div className="pg">
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800,marginBottom:20}}>ネクストアクション</h2>
+{od.length>0&&<><div style={{fontSize:11,fontWeight:700,color:“var(–er)”,letterSpacing:“0.08em”,marginBottom:8}}>⚠ 期限切れ ({od.length}件)</div>{od.map(p=><Row key={p.id} p={p} type="od"/>)}</>}
+{pend.length>0&&<><div style={{fontSize:11,fontWeight:700,color:“var(–mu)”,letterSpacing:“0.08em”,margin:“16px 0 8px”}}>未対応 ({pend.length}件)</div>{pend.map(p=><Row key={p.id} p={p} type="pend"/>)}</>}
+{done.length>0&&<><div style={{fontSize:11,fontWeight:700,color:“var(–dim)”,letterSpacing:“0.08em”,margin:“16px 0 8px”}}>完了済み ({done.length}件)</div>{done.map(p=><Row key={p.id} p={p} type="done"/>)}</>}
+{od.length===0&&pend.length===0&&done.length===0&&<div className=“card” style={{textAlign:“center”,padding:60,color:“var(–mu)”}}><div style={{fontSize:32,marginBottom:12}}>✓</div><div style={{fontWeight:700}}>アクションはありません</div></div>}
+</div>
+);
+}
+
+function Dashboard({people,refs,setPage}){
+const now=new Date();
+const months=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return{year:d.getFullYear(),month:d.getMonth()+1,label:`${d.getMonth()+1}月`}});
+const ms=months.map(({year,month,label})=>{
+const list=people.filter(p=>{if(!p.met_date)return false;const d=new Date(p.met_date);return d.getFullYear()===year&&d.getMonth()+1===month});
+const rc=[…new Set(refs.filter(r=>list.some(p=>p.id===r.person_id)).map(r=>r.person_id))].length;
+return{label,met:list.length,ref:rc,meet:list.filter(p=>p.has_meeting).length,fri:list.filter(p=>p.is_friend).length};
+});
+const tm=people.length;
+const tr=[…new Set(refs.map(r=>r.person_id))].length;
+const tme=people.filter(p=>p.has_meeting).length;
+const tf=people.filter(p=>p.is_friend).length;
+const tna=people.filter(p=>p.next_action).length;
+const fmt=(n,d)=>d>0?`${(n/d*100).toFixed(1)}%`:”—”;
+const od=people.filter(p=>p.next_action&&!p.next_action_done&&p.next_action_due&&new Date(p.next_action_due)<new Date());
+
+const pm={};people.forEach(p=>{const k=p.met_place||“不明”;if(!pm[k])pm[k]={m:0,f:0,me:0};pm[k].m++;if(p.is_friend)pm[k].f++;if(p.has_meeting)pm[k].me++});
+const ps=Object.entries(pm).map(([pl,s])=>({pl,m:s.m,l:s.m>0?(s.f/s.m*100).toFixed(0):0,me:s.m>0?(s.me/s.m*100).toFixed(0):0})).sort((a,b)=>b.m-a.m).slice(0,5);
+
+const gm={};people.forEach(p=>{const k=p.gender||“other”;if(!gm[k])gm[k]={m:0,f:0};gm[k].m++;if(p.is_friend)gm[k].f++});
+const gs=Object.entries(gm).map(([g,s])=>({l:GL[g]||g,m:s.m,land:s.m>0?(s.f/s.m*100).toFixed(0):0}));
+
+const rm={};refs.forEach(r=>{if(!rm[r.referral_type])rm[r.referral_type]={c:0,f:0};rm[r.referral_type].c++;if(people.find(p=>p.id===r.person_id)?.is_friend)rm[r.referral_type].f++});
+const rs=Object.entries(rm).map(([t,s])=>({t,l:RT[t]?.label||t,e:RT[t]?.emoji||””,col:RT[t]?.color||“var(–ac)”,c:s.c,land:s.c>0?(s.f/s.c*100).toFixed(0):0}));
+
+const mx=Math.max(…ms.map(m=>m.met),1);
+const bc=[“var(–ac)”,”#34d399”,”#fbbf24”,”#f472b6”];
+const bk=[“met”,“ref”,“meet”,“fri”];
+const bl=[“出会い”,“送客”,“面談”,“友達登録”];
+
+function MBar({label,pct,color,sub}){
+return(
+<div style={{marginBottom:10}}>
+<div style={{display:“flex”,justifyContent:“space-between”,fontSize:12,marginBottom:3}}>
+<span style={{fontWeight:600}}>{label}</span>
+<span style={{color:color||“var(–ac)”,fontWeight:700}}>{pct}%</span>
+</div>
+<div style={{height:5,background:“var(–sf3)”,borderRadius:3,overflow:“hidden”}}>
+<div style={{height:“100%”,width:`${Math.min(Number(pct),100)}%`,background:color||“var(–ac)”,borderRadius:3}}/>
+</div>
+{sub&&<div style={{fontSize:10,color:“var(–dim)”,marginTop:2}}>{sub}</div>}
+</div>
+);
+}
+
+return(
+<div className="pg">
+<div style={{display:“flex”,justifyContent:“space-between”,alignItems:“flex-start”,marginBottom:20,flexWrap:“wrap”,gap:8}}>
+<div>
+<h2 style={{fontFamily:”‘Syne’,sans-serif”,fontSize:22,fontWeight:800}}>ダッシュボード</h2>
+<p style={{color:“var(–mu)”,fontSize:13}}>{now.getFullYear()}年{now.getMonth()+1}月{now.getDate()}日 現在</p>
+</div>
+<button className=“btn” onClick={()=>setPage(“input”)}>＋ 新規入力</button>
+</div>
+
+```
+  <div className="fw" style={{marginBottom:8}}>
+    {[["総出会い数",tm,"var(--tx)","人"],["送客人数",tr,"#60a5fa","人"],["面談獲得",tme,"#fbbf24","人"],["友達登録",tf,"#22c55e","人"],["NA設定",tna,"#a78bfa","人"]].map(([l,v,c,s])=>(
+      <div key={l} className="kc"><div className="kl">{l}</div><div className="kv" style={{color:c}}>{v}</div><div className="ks">{s}</div></div>
+    ))}
+  </div>
+  <div className="fw" style={{marginBottom:16}}>
+    {[["送客率",fmt(tr,tm),"#60a5fa","送客÷出会い"],["着地率",fmt(tf,tr),"#34d399","友達÷送客"],["面談率",fmt(tme,tr),"#fbbf24","面談÷送客"],["出会い面談率",fmt(tme,tm),"#f472b6","面談÷出会い"],["NA率",fmt(tna,tm),"#a78bfa","NA設定÷出会い"]].map(([l,v,c,s])=>(
+      <div key={l} className="kc"><div className="kl">{l}</div><div className="kv" style={{color:c}}>{v}</div><div className="ks">{s}</div></div>
+    ))}
+  </div>
+
+  <div className="g2" style={{marginBottom:10}}>
+    <div className="card">
+      <div style={{fontSize:13,fontWeight:700,marginBottom:10}}>月別推移（直近6ヶ月）</div>
+      <div className="fw" style={{marginBottom:8,gap:6}}>
+        {bk.map((k,i)=><div key={k} style={{display:"flex",alignItems:"center",gap:3,fontSize:10,color:"var(--mu)"}}><span style={{width:8,height:8,borderRadius:2,background:bc[i],display:"inline-block"}}/>{bl[i]}</div>)}
+      </div>
+      <div style={{display:"flex",alignItems:"flex-end",gap:6,height:90}}>
+        {ms.map((m,mi)=>(
+          <div key={mi} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center"}}>
+            <div style={{width:"100%",display:"flex",gap:1,alignItems:"flex-end",height:78}}>
+              {bk.map((k,i)=><div key={k} style={{flex:1,height:`${mx>0?(m[k]/mx*78):0}px`,background:bc[i],borderRadius:"2px 2px 0 0",minHeight:m[k]>0?"3px":"0",opacity:.85}} title={`${bl[i]}: ${m[k]}`}/>)}
+            </div>
+            <div style={{fontSize:10,color:"var(--dim)",marginTop:3}}>{m.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="card">
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>場所別 着地率</div>
+      {ps.length===0?<div style={{color:"var(--dim)",fontSize:13}}>データなし</div>:ps.map(s=><MBar key={s.pl} label={`${s.pl} (${s.m}人)`} pct={s.l} color="#34d399" sub={`面談率: ${s.me}%`}/>)}
+    </div>
+
+    <div className="card">
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>性別別 着地率</div>
+      {gs.length===0?<div style={{color:"var(--dim)",fontSize:13}}>データなし</div>:gs.map(s=><MBar key={s.l} label={`${s.l} (${s.m}人)`} pct={s.land} color="#f472b6"/>)}
+    </div>
+
+    <div className="card">
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>送客先別 着地率</div>
+      {rs.length===0?<div style={{color:"var(--dim)",fontSize:13}}>データなし</div>:rs.map(s=><MBar key={s.t} label={`${s.e} ${s.l} (${s.c}件)`} pct={s.land} color={s.col}/>)}
+    </div>
+  </div>
+
+  {od.length>0&&(
+    <div className="card" style={{borderColor:"rgba(239,68,68,0.33)"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <div style={{fontSize:13,fontWeight:700,color:"var(--er)"}}>⚠ 期限切れアクション ({od.length}件)</div>
+        <button className="btng" style={{fontSize:11,padding:"4px 12px"}} onClick={()=>setPage("actions")}>全て見る →</button>
+      </div>
+      {od.slice(0,4).map(p=>(
+        <div key={p.id} style={{display:"flex",gap:12,fontSize:12,padding:"6px 0",borderBottom:"1px solid var(--bd)"}}>
+          <span style={{fontWeight:700,minWidth:60}}>{p.name}</span>
+          <span style={{color:"var(--mu)",flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.next_action}</span>
+          <span style={{color:"var(--er)",fontWeight:700,flexShrink:0}}>{p.next_action_due}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {people.length===0&&(
+    <div className="card" style={{textAlign:"center",padding:60,marginTop:16}}>
+      <div style={{fontSize:36,marginBottom:12}}>✦</div>
+      <div style={{fontWeight:700,fontSize:16,marginBottom:6}}>まだデータがありません</div>
+      <div style={{color:"var(--mu)",fontSize:13,marginBottom:20}}>最初の出会いを記録してみましょう</div>
+      <button className="btn" onClick={()=>setPage("input")}>＋ 最初の人物を入力する</button>
+    </div>
+  )}
+</div>
+```
+
+);
+}
+
+function App(){
+const [page,setPage]=useState(“dashboard”);
+const [sub,setSub]=useState(null);
+const [people,setPeople]=useState(()=>DB.people());
+const [refs,setRefs]=useState(()=>DB.refs());
+const [parsed,setParsed]=useState(null);
+const [origMemo,setOrigMemo]=useState(””);
+const [toastState,setToastState]=useState({msg:””,type:“success”});
+
+useEffect(()=>{DB.sp(people)},[people]);
+useEffect(()=>{DB.sr(refs)},[refs]);
+
+function showToast(msg,type=“success”){
+setToastState({msg,type});
+setTimeout(()=>setToastState({msg:””,type:“success”}),3000);
+}
+
+const odCount=people.filter(p=>p.next_action&&!p.next_action_done&&p.next_action_due&&new Date(p.next_action_due)<new Date()).length;
+
+function navTo(p){setSub(null);setPage(p);window.scrollTo(0,0)}
+
+function handleAIParsed(data,memo){setParsed(data);setOrigMemo(memo);setSub(“confirm”)}
+
+function handleSaveNew(f){
+const id=uid();const now=new Date().toISOString();
+setPeople(prev=>[{
+id,name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
+age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
+residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
+family_structure:f.family_structure||null,conversation:f.conversation||null,
+next_action:f.next_action||null,next_action_due:f.next_action_due||null,next_action_done:false,
+has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
+is_friend:f.is_friend||false,friended_date:f.friended_date||null,
+status:“active”,notes:f.notes||null,
+last_contact_date:f.met_date||now.split(“T”)[0],created_at:now,updated_at:now,
+},…prev]);
+if(f.referral_types?.length>0){
+setRefs(prev=>[…prev,…f.referral_types.map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||now.split(“T”)[0],created_at:now}))]);
+}
+showToast(`${f.name}を登録しました`);
+setSub(null);setPage(“people”);
+}
+
+function handleUpdate(id,f){
+setPeople(prev=>prev.map(p=>p.id!==id?p:{
+…p,name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
+age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
+residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
+family_structure:f.family_structure||null,conversation:f.conversation||null,
+next_action:f.next_action||null,next_action_due:f.next_action_due||null,next_action_done:f.next_action_done||false,
+has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
+is_friend:f.is_friend||false,friended_date:f.friended_date||null,
+status:f.status||“active”,notes:f.notes||null,updated_at:new Date().toISOString(),
+}));
+setRefs(prev=>[…prev.filter(r=>r.person_id!==id),…(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||new Date().toISOString().split(“T”)[0],created_at:new Date().toISOString()}))]);
+showToast(“保存しました”);setSub(`detail:${id}`);
+}
+
+function handleDelete(id){
+const p=people.find(x=>x.id===id);
+setPeople(prev=>prev.filter(x=>x.id!==id));
+setRefs(prev=>prev.filter(r=>r.person_id!==id));
+showToast(`${p?.name}を削除しました`);
+setSub(null);setPage(“people”);
+}
+
+function handleToggleNA(id){setPeople(prev=>prev.map(p=>p.id===id?{…p,next_action_done:!p.next_action_done}:p))}
+
+const navPage=sub?.startsWith(“detail”)||sub?.startsWith(“edit”)?“people”:page;
+
+function renderContent(){
+if(sub===“confirm”)return <ConfirmPage parsed={parsed} memo={origMemo} onSave={handleSaveNew} onBack={()=>setSub(null)} toast={showToast}/>;
+if(sub?.startsWith(“detail:”)){
+const id=sub.split(”:”)[1];
+return <PersonDetail pid={id} people={people} refs={refs} onBack={()=>setSub(null)} onEdit={()=>setSub(`edit:${id}`)} onDelete={handleDelete} onToggleNA={handleToggleNA}/>;
+}
+if(sub?.startsWith(“edit:”)){
+const id=sub.split(”:”)[1];
+return <EditPage pid={id} people={people} refs={refs} onSave={handleUpdate} onBack={()=>setSub(`detail:${id}`)} toast={showToast}/>;
+}
+if(page===“dashboard”)return <Dashboard people={people} refs={refs} setPage={navTo}/>;
+if(page===“input”)return <InputPage onConfirm={handleAIParsed} toast={showToast}/>;
+if(page===“people”)return <PeoplePage people={people} refs={refs} onSelect={id=>setSub(`detail:${id}`)} onNew={()=>navTo(“input”)}/>;
+if(page===“actions”)return <ActionsPage people={people} onSelect={id=>setSub(`detail:${id}`)} onToggleNA={handleToggleNA}/>;
+return null;
+}
+
+return(
+<>
+<Nav page={navPage} setPage={navTo} od={odCount}/>
+<main>{renderContent()}</main>
+<Toast msg={toastState.msg} type={toastState.type}/>
+</>
+);
+}
+
+ReactDOM.createRoot(document.getElementById(“root”)).render(<App/>);
+</script>
+
+</body>
+</html>$L10\",\"3\",{}]]\n"])</script></body></html>
