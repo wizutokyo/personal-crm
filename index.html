@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -72,6 +72,9 @@ const SC={
 const GL={male:"男性",female:"女性",other:"その他"};
 
 const DB={
+  const SUPABASE_URL="https://hhudynanewurcftbjuee.supabase.co";
+  const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhodWR5bmFuZXd1cmNmdGJqdWVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4MDk0NDQsImV4cCI6MjA5MzM4NTQ0NH0.NvciXARlmNaT5RqcGFsry8HO4HPKdVRbDFS6B4Hb0J4";
+  const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   people:()=>{try{return JSON.parse(localStorage.getItem("crm_p")||"[]")}catch{return[]}},
   refs:()=>{try{return JSON.parse(localStorage.getItem("crm_r")||"[]")}catch{return[]}},
   sp:(d)=>localStorage.setItem("crm_p",JSON.stringify(d)),
@@ -809,8 +812,18 @@ function Dashboard({people,refs,setPage}){
 function App(){
   const [page,setPage]=useState("dashboard");
   const [sub,setSub]=useState(null);
-  const [people,setPeople]=useState(()=>DB.people());
-  const [refs,setRefs]=useState(()=>DB.refs());
+  const [people,setPeople]=useState([]);
+  const [refs,setRefs]=useState([]);
+
+useEffect(()=>{
+  async function load(){
+    const{data:p}=await sb.from("people").select("*").order("created_at",{ascending:false});
+    const{data:r}=await sb.from("referral_records").select("*");
+    if(p)setPeople(p);
+    if(r)setRefs(r);
+  }
+  load();
+},[]);
   const [parsed,setParsed]=useState(null);
   const [origMemo,setOrigMemo]=useState("");
   const [toastState,setToastState]=useState({msg:"",type:"success"});
@@ -829,50 +842,71 @@ function App(){
 
   function handleAIParsed(data,memo){setParsed(data);setOrigMemo(memo);setSub("confirm")}
 
-  function handleSaveNew(f){
-    const id=uid();const now=new Date().toISOString();
-    setPeople(prev=>[{
-      id,name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
-      age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
-      residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
-      family_structure:f.family_structure||null,conversation:f.conversation||null,
-      next_action:f.next_action||null,next_action_due:f.next_action_due||null,next_action_done:false,
-      has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
-      is_friend:f.is_friend||false,friended_date:f.friended_date||null,
-      status:"active",notes:f.notes||null,
-      last_contact_date:f.met_date||now.split("T")[0],created_at:now,updated_at:now,
-    },...prev]);
-    if(f.referral_types?.length>0){
-      setRefs(prev=>[...prev,...f.referral_types.map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||now.split("T")[0],created_at:now}))]);
-    }
-    showToast(`${f.name}を登録しました`);
-    setSub(null);setPage("people");
+  async function handleSaveNew(f){
+  const id=uid();const now=new Date().toISOString();
+  const person={
+    id,name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
+    age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
+    residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
+    family_structure:f.family_structure||null,conversation:f.conversation||null,
+    next_action:f.next_action||null,next_action_due:f.next_action_due||null,next_action_done:false,
+    has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
+    is_friend:f.is_friend||false,friended_date:f.friended_date||null,
+    status:"active",notes:f.notes||null,
+    last_contact_date:f.met_date||now.split("T")[0],created_at:now,updated_at:now,
+  };
+  const{error}=await sb.from("people").insert(person);
+  if(error){showToast("保存に失敗しました: "+error.message,"error");return;}
+  if(f.referral_types?.length>0){
+    const refs=f.referral_types.map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||now.split("T")[0],created_at:now}));
+    await sb.from("referral_records").insert(refs);
   }
+  setPeople(prev=>[{...person},...prev]);
+  setRefs(prev=>[...prev,...(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||now.split("T")[0],created_at:now}))]);
+  showToast(`${f.name}を登録しました`);
+  setSub(null);setPage("people");
+}
 
-  function handleUpdate(id,f){
-    setPeople(prev=>prev.map(p=>p.id!==id?p:{
-      ...p,name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
-      age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
-      residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
-      family_structure:f.family_structure||null,conversation:f.conversation||null,
-      next_action:f.next_action||null,next_action_due:f.next_action_due||null,next_action_done:f.next_action_done||false,
-      has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
-      is_friend:f.is_friend||false,friended_date:f.friended_date||null,
-      status:f.status||"active",notes:f.notes||null,updated_at:new Date().toISOString(),
-    }));
-    setRefs(prev=>[...prev.filter(r=>r.person_id!==id),...(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||new Date().toISOString().split("T")[0],created_at:new Date().toISOString()}))]);
-    showToast("保存しました");setSub(`detail:${id}`);
+  async function handleUpdate(id,f){
+   const updated={
+    name:f.name,met_date:f.met_date||null,met_place:f.met_place||null,
+    age:f.age?Number(f.age):null,gender:f.gender||null,occupation:f.occupation||null,
+    residence:f.residence||null,university:f.university||null,hometown:f.hometown||null,
+    family_structure:f.family_structure||null,conversation:f.conversation||null,
+    next_action:f.next_action||null,next_action_due:f.next_action_due||null,
+    next_action_done:f.next_action_done||false,
+    has_meeting:f.has_meeting||false,meeting_date:f.meeting_date||null,
+    is_friend:f.is_friend||false,friended_date:f.friended_date||null,
+    status:f.status||"active",notes:f.notes||null,updated_at:new Date().toISOString(),
+  };
+  await sb.from("people").update(updated).eq("id",id);
+  await sb.from("referral_records").delete().eq("person_id",id);
+  if(f.referral_types?.length>0){
+    const refs=f.referral_types.map(type=>({id:uid(),person_id:id,referral_type:type,referral_date:f.met_date||new Date().toISOString().split("T")[0],created_at:new Date().toISOString()}));
+    await sb.from("referral_records").insert(refs);
   }
+  setPeople(prev=>prev.map(p=>p.id!==id?p:{...p,...updated}));
+  setRefs(prev=>[...prev.filter(r=>r.person_id!==id),...(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type}))]);
+  showToast("保存しました");
+  setSub(`detail:${id}`);
+}
 
-  function handleDelete(id){
+  async function handleDelete(id){
     const p=people.find(x=>x.id===id);
+    await sb.from("referral_records").delete().eq("person_id",id);
+    await sb.from("people").delete().eq("id",id);
     setPeople(prev=>prev.filter(x=>x.id!==id));
     setRefs(prev=>prev.filter(r=>r.person_id!==id));
     showToast(`${p?.name}を削除しました`);
     setSub(null);setPage("people");
   }
 
-  function handleToggleNA(id){setPeople(prev=>prev.map(p=>p.id===id?{...p,next_action_done:!p.next_action_done}:p))}
+  async function handleToggleNA(id){
+    const p=people.find(x=>x.id===id);
+    const done=!p.next_action_done;
+    await sb.from("people").update({next_action_done:done}).eq("id",id);
+    setPeople(prev=>prev.map(x=>x.id===id?{...x,next_action_done:done}:x));
+  }
 
   const navPage=sub?.startsWith("detail")||sub?.startsWith("edit")?"people":page;
 
