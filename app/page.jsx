@@ -107,11 +107,11 @@ function computeStatus(person) {
 }
 
 // ============================================================
-// AI (Ollama – 無料ローカルLLM)
+// AI (Claude API)
 // ============================================================
 async function callAI(memo, settings = {}) {
-  const ollamaUrl = (settings.ollamaUrl || "http://localhost:11434").replace(/\/$/, "");
-  const ollamaModel = settings.ollamaModel || "llama3.2";
+  const apiKey = settings.claudeApiKey || "";
+  if (!apiKey) throw new Error("APIキーが設定されていません。設定タブで入力してください。");
   const today = new Date().toISOString().split("T")[0];
   const year = new Date().getFullYear();
   const prompt = `あなたは人間関係管理の専門アシスタントです。メモから人物情報を抽出しJSONのみで返してください。
@@ -135,14 +135,14 @@ JSONのみ返してください。
 
 メモ: ${memo}`;
 
-  const res = await fetch(`${ollamaUrl}/api/generate`, {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: ollamaModel, prompt, stream: false, format: "json" }),
+    headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, messages: [{ role: "user", content: prompt }] }),
   });
-  if (!res.ok) throw new Error(`Ollama ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Claude API ${res.status}: ${await res.text()}`);
   const data = await res.json();
-  const text = data.response || "";
+  const text = data.content?.map((c) => c.text || "").join("") || "";
   return JSON.parse(text.replace(/```json|```/g, "").trim());
 }
 
@@ -272,7 +272,7 @@ function InputPage({ onConfirm, toast, settings }) {
     onConfirm({}, memo);
   }
 
-  const ollamaModel = settings?.ollamaModel || "llama3.2";
+  const hasKey = !!(settings?.claudeApiKey);
 
   return (
     <div style={{ padding: "28px 24px", maxWidth: "700px", margin: "0 auto" }}>
@@ -281,7 +281,9 @@ function InputPage({ onConfirm, toast, settings }) {
 
       <div style={{ ...S.card, marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 16px" }}>
         <span style={{ fontSize: "12px", color: C.muted }}>⚙ AI:</span>
-        <span style={{ fontSize: "12px", color: C.accent, fontWeight: 700 }}>Ollama / {ollamaModel}</span>
+        <span style={{ fontSize: "12px", color: hasKey ? C.accent : C.warn, fontWeight: 700 }}>
+          {hasKey ? "Claude Sonnet 4 ✓" : "APIキー未設定"}
+        </span>
         <span style={{ fontSize: "11px", color: C.dim, marginLeft: "auto" }}>設定タブで変更できます</span>
       </div>
 
@@ -1149,10 +1151,8 @@ function Dashboard({ people, referrals, setPage }) {
 // SETTINGS PAGE
 // ============================================================
 function SettingsPage({ people, referrals, settings, onSettingsChange, toast }) {
-  const [form, setForm] = useState({
-    ollamaUrl: settings.ollamaUrl || "http://localhost:11434",
-    ollamaModel: settings.ollamaModel || "llama3.2",
-  });
+  const [form, setForm] = useState({ claudeApiKey: settings.claudeApiKey || "" });
+  const [showKey, setShowKey] = useState(false);
   const [testing, setTesting] = useState(false);
 
   function save(key, val) {
@@ -1161,17 +1161,19 @@ function SettingsPage({ people, referrals, settings, onSettingsChange, toast }) 
     onSettingsChange(next);
   }
 
-  async function testConnection() {
+  async function testKey() {
+    if (!form.claudeApiKey) { toast("APIキーを入力してください", "error"); return; }
     setTesting(true);
     try {
-      const url = (form.ollamaUrl || "http://localhost:11434").replace(/\/$/, "");
-      const res = await fetch(`${url}/api/tags`, { method: "GET" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const models = data.models?.map((m) => m.name).join(", ") || "（モデルなし）";
-      toast(`接続成功！利用可能モデル: ${models}`, "success");
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-api-key": form.claudeApiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+        body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 10, messages: [{ role: "user", content: "hi" }] }),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error?.message || res.status); }
+      toast("APIキー認証成功！", "success");
     } catch (e) {
-      toast(`接続失敗: ${e.message} — Ollamaが起動しているか確認してください`, "error");
+      toast(`認証失敗: ${e.message}`, "error");
     } finally {
       setTesting(false);
     }
@@ -1189,41 +1191,30 @@ function SettingsPage({ people, referrals, settings, onSettingsChange, toast }) 
       <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: "22px", fontWeight: 800, margin: "0 0 4px" }}>設定</h2>
       <p style={{ color: C.muted, fontSize: "13px", margin: "0 0 24px" }}>AIとデータエクスポートの設定</p>
 
-      {/* Ollama AI */}
+      {/* Claude API Key */}
       <div style={{ ...S.card, marginBottom: "16px" }}>
         <div style={{ fontSize: "13px", fontWeight: 800, color: C.accent, marginBottom: "16px", letterSpacing: "0.04em" }}>
-          🤖 Ollama（ローカルAI設定）
+          🤖 Claude API設定
         </div>
-        <div style={{
-          background: C.surface2, border: `1px solid ${C.border2}`, borderRadius: "8px",
-          padding: "12px 14px", fontSize: "12px", color: C.muted, marginBottom: "16px", lineHeight: 1.7,
-        }}>
-          <b style={{ color: C.text }}>Ollamaのセットアップ方法：</b><br />
-          1. <a href="https://ollama.com" style={{ color: C.accent }}>ollama.com</a> からインストール<br />
-          2. ターミナルで <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>ollama pull llama3.2</code> を実行<br />
-          3. <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>ollama serve</code> でサーバー起動（自動起動の場合は不要）<br />
-          日本語精度を上げたい場合は <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>qwen2.5:7b</code> がおすすめです
-        </div>
-
-        <Row label="Ollama URL">
-          <input
-            style={S.input} value={form.ollamaUrl}
-            onChange={(e) => save("ollamaUrl", e.target.value)}
-            placeholder="http://localhost:11434"
-          />
-        </Row>
-        <Row label="モデル名">
-          <input
-            style={S.input} value={form.ollamaModel}
-            onChange={(e) => save("ollamaModel", e.target.value)}
-            placeholder="llama3.2"
-          />
+        <Row label="Anthropic APIキー">
+          <div style={{ display: "flex", gap: "8px" }}>
+            <input
+              style={S.input}
+              type={showKey ? "text" : "password"}
+              value={form.claudeApiKey}
+              onChange={(e) => save("claudeApiKey", e.target.value)}
+              placeholder="sk-ant-..."
+            />
+            <button onClick={() => setShowKey((v) => !v)} style={{ ...S.btnGhost, padding: "9px 12px", flexShrink: 0 }}>
+              {showKey ? "隠す" : "表示"}
+            </button>
+          </div>
           <div style={{ fontSize: "11px", color: C.dim, marginTop: "5px" }}>
-            例: llama3.2 / qwen2.5:7b / gemma3:4b
+            APIキーはブラウザのlocalStorageにのみ保存されます
           </div>
         </Row>
 
-        <button onClick={testConnection} disabled={testing} style={{
+        <button onClick={testKey} disabled={testing} style={{
           ...S.btnGhost, display: "flex", alignItems: "center", gap: "8px",
           opacity: testing ? 0.5 : 1,
         }}>
