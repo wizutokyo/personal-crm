@@ -65,9 +65,34 @@ const S = {
 const DB = {
   people: () => { try { return JSON.parse(localStorage.getItem("crm_people2") || "[]"); } catch { return []; } },
   referrals: () => { try { return JSON.parse(localStorage.getItem("crm_refs2") || "[]"); } catch { return []; } },
+  settings: () => { try { return JSON.parse(localStorage.getItem("crm_settings") || "{}"); } catch { return {}; } },
   savePeople: (d) => localStorage.setItem("crm_people2", JSON.stringify(d)),
   saveReferrals: (d) => localStorage.setItem("crm_refs2", JSON.stringify(d)),
+  saveSettings: (d) => localStorage.setItem("crm_settings", JSON.stringify(d)),
 };
+
+function exportCSV(people, referrals) {
+  const headers = ["名前","出会い日","場所","年齢","性別","職業","住まい","大学","出身","家族構成","会話メモ","送客先","次のアクション","期限","完了","面談","面談日","友達","友達登録日","ステータス","メモ"];
+  const rows = people.map((p) => {
+    const refs = referrals.filter((r) => r.person_id === p.id).map((r) => REFERRAL_TYPES[r.referral_type]?.label || r.referral_type).join("|");
+    return [
+      p.name, p.met_date, p.met_place, p.age ?? "", GENDER_LABELS[p.gender] || "",
+      p.occupation, p.residence, p.university, p.hometown, p.family_structure,
+      p.conversation, refs, p.next_action, p.next_action_due,
+      p.next_action_done ? "完了" : "未完了",
+      p.has_meeting ? "あり" : "なし", p.meeting_date ?? "",
+      p.is_friend ? "済み" : "未", p.friended_date ?? "",
+      computeStatus(p), p.notes,
+    ].map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",");
+  });
+  const csv = "﻿" + [headers.join(","), ...rows].join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `crm_${new Date().toISOString().split("T")[0]}.csv`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
 
@@ -82,9 +107,11 @@ function computeStatus(person) {
 }
 
 // ============================================================
-// AI
+// AI (Ollama – 無料ローカルLLM)
 // ============================================================
-async function callAI(memo) {
+async function callAI(memo, settings = {}) {
+  const ollamaUrl = (settings.ollamaUrl || "http://localhost:11434").replace(/\/$/, "");
+  const ollamaModel = settings.ollamaModel || "llama3.2";
   const today = new Date().toISOString().split("T")[0];
   const year = new Date().getFullYear();
   const prompt = `あなたは人間関係管理の専門アシスタントです。メモから人物情報を抽出しJSONのみで返してください。
@@ -108,16 +135,14 @@ JSONのみ返してください。
 
 メモ: ${memo}`;
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
+  const res = await fetch(`${ollamaUrl}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514", max_tokens: 1000,
-      messages: [{ role: "user", content: prompt }],
-    }),
+    body: JSON.stringify({ model: ollamaModel, prompt, stream: false, format: "json" }),
   });
+  if (!res.ok) throw new Error(`Ollama ${res.status}: ${await res.text()}`);
   const data = await res.json();
-  const text = data.content?.map((c) => c.text || "").join("") || "";
+  const text = data.response || "";
   return JSON.parse(text.replace(/```json|```/g, "").trim());
 }
 
@@ -183,6 +208,7 @@ function Nav({ page, setPage, overdueCount }) {
     { id: "input",     icon: "+", label: "新規入力" },
     { id: "people",    icon: "⊞", label: "人物一覧" },
     { id: "actions",   icon: "◎", label: "アクション", badge: overdueCount },
+    { id: "settings",  icon: "⚙", label: "設定" },
   ];
   return (
     <nav style={{
@@ -196,7 +222,7 @@ function Nav({ page, setPage, overdueCount }) {
         color: C.accent, marginRight: "20px", letterSpacing: "-0.02em",
       }}>PCRM</div>
       {items.map((item) => (
-        <button key={item.id} onClick={() => navTo(item.id)} style={{
+        <button key={item.id} onClick={() => setPage(item.id)} style={{
           background: page === item.id ? C.accentDim : "transparent",
           color: page === item.id ? C.accent : C.muted,
           border: page === item.id ? `1px solid ${C.accentGlow}` : "1px solid transparent",
@@ -221,7 +247,7 @@ function Nav({ page, setPage, overdueCount }) {
 // ============================================================
 // INPUT PAGE
 // ============================================================
-function InputPage({ onConfirm, toast }) {
+function InputPage({ onConfirm, toast, settings }) {
   const [memo, setMemo] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -233,19 +259,31 @@ function InputPage({ onConfirm, toast }) {
     if (!memo.trim()) return;
     setLoading(true);
     try {
-      const parsed = await callAI(memo);
+      const parsed = await callAI(memo, settings);
       onConfirm(parsed, memo);
-    } catch {
-      toast("AI解析に失敗しました。Claude APIキーを確認してください。", "error");
+    } catch (e) {
+      toast(`AI解析に失敗しました。設定でOllamaの接続先・モデルを確認してください。(${e.message})`, "error");
     } finally {
       setLoading(false);
     }
   }
 
+  function handleManual() {
+    onConfirm({}, memo);
+  }
+
+  const ollamaModel = settings?.ollamaModel || "llama3.2";
+
   return (
     <div style={{ padding: "28px 24px", maxWidth: "700px", margin: "0 auto" }}>
       <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: "22px", fontWeight: 800, margin: "0 0 4px" }}>メモ入力</h2>
       <p style={{ color: C.muted, fontSize: "13px", margin: "0 0 20px" }}>自由にメモを書くとAIが自動で整理します</p>
+
+      <div style={{ ...S.card, marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 16px" }}>
+        <span style={{ fontSize: "12px", color: C.muted }}>⚙ AI:</span>
+        <span style={{ fontSize: "12px", color: C.accent, fontWeight: 700 }}>Ollama / {ollamaModel}</span>
+        <span style={{ fontSize: "11px", color: C.dim, marginLeft: "auto" }}>設定タブで変更できます</span>
+      </div>
 
       <div style={S.card}>
         <label style={S.label}>メモ・箇条書き</label>
@@ -254,7 +292,10 @@ function InputPage({ onConfirm, toast }) {
           placeholder="例）5/2 けいすけ 25歳 営業、渋谷住み…"
           style={{ ...S.input, minHeight: "160px", resize: "vertical", lineHeight: 1.7 }}
         />
-        <div style={{ marginTop: "12px", display: "flex", justifyContent: "flex-end" }}>
+        <div style={{ marginTop: "12px", display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+          <button onClick={handleManual} style={{ ...S.btnGhost, fontSize: "12px" }}>
+            ✎ 手動入力
+          </button>
           <button onClick={handleParse} disabled={!memo.trim() || loading} style={{
             ...S.btn, opacity: !memo.trim() || loading ? 0.5 : 1,
             display: "flex", alignItems: "center", gap: "8px",
@@ -1105,6 +1146,126 @@ function Dashboard({ people, referrals, setPage }) {
 }
 
 // ============================================================
+// SETTINGS PAGE
+// ============================================================
+function SettingsPage({ people, referrals, settings, onSettingsChange, toast }) {
+  const [form, setForm] = useState({
+    ollamaUrl: settings.ollamaUrl || "http://localhost:11434",
+    ollamaModel: settings.ollamaModel || "llama3.2",
+  });
+  const [testing, setTesting] = useState(false);
+
+  function save(key, val) {
+    const next = { ...form, [key]: val };
+    setForm(next);
+    onSettingsChange(next);
+  }
+
+  async function testConnection() {
+    setTesting(true);
+    try {
+      const url = (form.ollamaUrl || "http://localhost:11434").replace(/\/$/, "");
+      const res = await fetch(`${url}/api/tags`, { method: "GET" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const models = data.models?.map((m) => m.name).join(", ") || "（モデルなし）";
+      toast(`接続成功！利用可能モデル: ${models}`, "success");
+    } catch (e) {
+      toast(`接続失敗: ${e.message} — Ollamaが起動しているか確認してください`, "error");
+    } finally {
+      setTesting(false);
+    }
+  }
+
+  const Row = ({ label, children }) => (
+    <div style={{ marginBottom: "16px" }}>
+      <label style={S.label}>{label}</label>
+      {children}
+    </div>
+  );
+
+  return (
+    <div style={{ padding: "28px 24px", maxWidth: "600px", margin: "0 auto" }}>
+      <h2 style={{ fontFamily: "'Syne',sans-serif", fontSize: "22px", fontWeight: 800, margin: "0 0 4px" }}>設定</h2>
+      <p style={{ color: C.muted, fontSize: "13px", margin: "0 0 24px" }}>AIとデータエクスポートの設定</p>
+
+      {/* Ollama AI */}
+      <div style={{ ...S.card, marginBottom: "16px" }}>
+        <div style={{ fontSize: "13px", fontWeight: 800, color: C.accent, marginBottom: "16px", letterSpacing: "0.04em" }}>
+          🤖 Ollama（ローカルAI設定）
+        </div>
+        <div style={{
+          background: C.surface2, border: `1px solid ${C.border2}`, borderRadius: "8px",
+          padding: "12px 14px", fontSize: "12px", color: C.muted, marginBottom: "16px", lineHeight: 1.7,
+        }}>
+          <b style={{ color: C.text }}>Ollamaのセットアップ方法：</b><br />
+          1. <a href="https://ollama.com" style={{ color: C.accent }}>ollama.com</a> からインストール<br />
+          2. ターミナルで <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>ollama pull llama3.2</code> を実行<br />
+          3. <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>ollama serve</code> でサーバー起動（自動起動の場合は不要）<br />
+          日本語精度を上げたい場合は <code style={{ background: C.surface3, padding: "1px 5px", borderRadius: "4px" }}>qwen2.5:7b</code> がおすすめです
+        </div>
+
+        <Row label="Ollama URL">
+          <input
+            style={S.input} value={form.ollamaUrl}
+            onChange={(e) => save("ollamaUrl", e.target.value)}
+            placeholder="http://localhost:11434"
+          />
+        </Row>
+        <Row label="モデル名">
+          <input
+            style={S.input} value={form.ollamaModel}
+            onChange={(e) => save("ollamaModel", e.target.value)}
+            placeholder="llama3.2"
+          />
+          <div style={{ fontSize: "11px", color: C.dim, marginTop: "5px" }}>
+            例: llama3.2 / qwen2.5:7b / gemma3:4b
+          </div>
+        </Row>
+
+        <button onClick={testConnection} disabled={testing} style={{
+          ...S.btnGhost, display: "flex", alignItems: "center", gap: "8px",
+          opacity: testing ? 0.5 : 1,
+        }}>
+          {testing
+            ? <><span style={{ display:"inline-block",width:"12px",height:"12px",border:"2px solid #6b6d8a44",borderTopColor:C.muted,borderRadius:"50%",animation:"spin 0.7s linear infinite" }} />確認中…</>
+            : "⚡ 接続テスト"}
+        </button>
+      </div>
+
+      {/* CSV Export */}
+      <div style={{ ...S.card, marginBottom: "16px" }}>
+        <div style={{ fontSize: "13px", fontWeight: 800, color: C.accent, marginBottom: "12px", letterSpacing: "0.04em" }}>
+          📊 スプレッドシートエクスポート
+        </div>
+        <p style={{ color: C.muted, fontSize: "13px", margin: "0 0 16px" }}>
+          全{people.length}件のデータをCSV形式でダウンロードします。<br />
+          Excel・Google スプレッドシートで開けます。
+        </p>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <button onClick={() => { exportCSV(people, referrals); toast("CSVをダウンロードしました"); }} style={S.btn}>
+            ⬇ CSV ダウンロード
+          </button>
+        </div>
+      </div>
+
+      {/* Data Management */}
+      <div style={S.card}>
+        <div style={{ fontSize: "13px", fontWeight: 800, color: C.accent, marginBottom: "12px", letterSpacing: "0.04em" }}>
+          💾 データ管理
+        </div>
+        <p style={{ color: C.muted, fontSize: "12px", margin: "0 0 12px" }}>
+          データはすべてブラウザのlocalStorageに保存されています。<br />
+          登録人数: {people.length}件　送客記録: {referrals.length}件
+        </p>
+      </div>
+
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+    </div>
+  );
+}
+
+// ============================================================
 // ROOT APP
 // ============================================================
 export default function App() {
@@ -1112,12 +1273,15 @@ export default function App() {
   const [subPage, setSubPage] = useState(null);
   const [people, setPeople] = useState(() => DB.people());
   const [referrals, setReferrals] = useState(() => DB.referrals());
+  const [settings, setSettings] = useState(() => DB.settings());
   const [parsedData, setParsedData] = useState(null);
   const [origMemo, setOrigMemo] = useState("");
   const [toastState, setToastState] = useState({ msg: "", type: "success" });
 
   useEffect(() => { DB.savePeople(people); }, [people]);
   useEffect(() => { DB.saveReferrals(referrals); }, [referrals]);
+
+  function handleSettingsChange(next) { setSettings(next); DB.saveSettings(next); }
 
   function showToast(msg, type = "success") {
     setToastState({ msg, type });
@@ -1224,12 +1388,15 @@ export default function App() {
       );
     }
     if (page === "dashboard") return <Dashboard people={people} referrals={referrals} setPage={navTo} />;
-    if (page === "input") return <InputPage onConfirm={handleAIParsed} toast={showToast} />;
+    if (page === "input") return <InputPage onConfirm={handleAIParsed} toast={showToast} settings={settings} />;
     if (page === "people") return (
       <PeoplePage people={people} referrals={referrals} onSelect={(id) => setSubPage(`detail:${id}`)} onNew={() => navTo("input")} />
     );
     if (page === "actions") return (
       <ActionsPage people={people} onSelect={(id) => setSubPage(`detail:${id}`)} onToggleNA={handleToggleNA} />
+    );
+    if (page === "settings") return (
+      <SettingsPage people={people} referrals={referrals} settings={settings} onSettingsChange={handleSettingsChange} toast={showToast} />
     );
     return null;
   }
