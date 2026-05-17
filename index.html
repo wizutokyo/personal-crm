@@ -197,34 +197,18 @@ function buildPrompt(memo){
   return`以下のメモから人物情報を抽出し、JSONのみ返してください。説明文不要。\n\n今日: ${today}（年省略時は${year}年で補完）\n\nJSONスキーマ（不明はnull）:\n{\n  "name":string|null,"met_date":"YYYY-MM-DD"|null,"met_place":string|null,\n  "age":number|null,"gender":"male"|"female"|"other"|null,\n  "occupation":string|null,"residence":string|null,"university":string|null,\n  "hometown":string|null,"family_structure":string|null,"conversation":string|null,\n  "referral_types":["beauty_salon"|"hr"|"real_estate"|"book"|"person"],\n  "next_action":string|null,"next_action_due":"YYYY-MM-DD"|null,\n  "has_meeting":false,"meeting_date":"YYYY-MM-DD"|null,\n  "is_friend":false,"friended_date":"YYYY-MM-DD"|null,"notes":string|null\n}\n\n送客先: 美容院→beauty_salon, 転職/就職→hr, 不動産→real_estate, 本→book, 人紹介→person\n\nメモ:\n${memo}`;
 }
 
-// APIキーで使えるモデルを��動検出
-async function findModel(key){
-  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-  if(!r.ok){
-    const e=await r.json().catch(()=>({}));
-    const msg=e?.error?.message||`HTTP ${r.status}`;
-    if(r.status===400||r.status===401||r.status===403)throw new Error("APIキーが無効です: "+msg);
-    throw new Error(msg);
-  }
-  const d=await r.json();
-  const list=(d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace("models/",""));
-  const prefer=["gemini-2.0-flash","gemini-1.5-flash","gemini-2.0-flash-lite","gemini-1.5-flash-8b"];
-  for(const p of prefer){const m=list.find(n=>n.startsWith(p));if(m)return m;}
-  if(list.length>0)return list[0];
-  throw new Error("このAPIキーで使えるモデルが見つかりません");
-}
-
-async function callGemini(memo){
-  const key=localStorage.getItem("crm_gk");
+async function callAI(memo){
+  const key=localStorage.getItem("crm_ak");
   if(!key)throw new Error("APIキーが設定されていません");
-  const model=await findModel(key);
-  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
-  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{temperature:0.1}})});
+  const res=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:"claude-haiku-4-5",max_tokens:1000,messages:[{role:"user",content:buildPrompt(memo)}]})
+  });
   if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`);}
   const d=await res.json();
-  const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
-  if(!t)throw new Error("AIの応���が空でした");
+  const t=d.content?.map(c=>c.text||"").join("")||"";
+  if(!t)throw new Error("AIの応答が空でした");
   try{
     const clean=t.replace(/```json|```/g,"").trim();
     const j=clean.startsWith("{")? clean : clean.substring(clean.indexOf("{"),clean.lastIndexOf("}")+1);
@@ -386,22 +370,22 @@ function bindDashboard(){
 // INPUT
 // ============================================================
 function renderInput(){
-  const hasKey=!!localStorage.getItem("crm_gk");
+  const hasKey=!!localStorage.getItem("crm_ak");
   return`<div class="page">
     <div class="page-title">新規入力</div>
-    <div class="page-sub">Gemini APIで自動解析 — 完全無料</div>
+    <div class="page-sub">Claude AIで自動解析</div>
     ${!hasKey?`<div class="info-box" id="key-banner">
-      <div style="font-size:13px;font-weight:700;color:var(--ac);margin-bottom:6px">Gemini APIキーを設定してください（無料）</div>
-      <div style="font-size:12px;color:var(--mu);line-height:1.8;margin-bottom:12px"><a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> でGoogleアカウントでログインし「APIキーを作成」してください。</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ac);margin-bottom:6px">Anthropic APIキーを設定してください</div>
+      <div style="font-size:12px;color:var(--mu);line-height:1.8;margin-bottom:12px"><a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> でアカウントを作成し「API Keys」からキーを取得してください。登録時に$5分の無料クレジットあり。</div>
       <button class="btn" id="show-key-btn">APIキーを入力する →</button>
     </div>`:`<div class="card" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:0" id="key-status">
-      <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block"></span><span style="font-size:12px;color:var(--mu)">Gemini APIキー設定済み</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block"></span><span style="font-size:12px;color:var(--mu)">Claude APIキー設定済み</span></div>
       <div style="display:flex;gap:6px"><button class="btng btn-sm" id="change-key-btn">変更</button><button class="btnd btn-sm" id="del-key-btn">削除</button></div>
     </div>`}
     <div id="key-form" class="card hidden">
-      <label class="lbl">Gemini APIキー</label>
+      <label class="lbl">Anthropic APIキー</label>
       <div style="display:flex;gap:8px;margin-top:4px">
-        <input type="password" class="inp" id="key-input" placeholder="AIza..." style="flex:1;font-family:monospace;font-size:13px">
+        <input type="password" class="inp" id="key-input" placeholder="sk-ant-..." style="flex:1;font-family:monospace;font-size:13px">
         <button class="btn" id="save-key-btn">保存</button>
         <button class="btng" id="cancel-key-btn">キャンセル</button>
       </div>
@@ -426,7 +410,7 @@ function renderInput(){
 }
 
 function bindInput(){
-  const hasKey=()=>!!localStorage.getItem("crm_gk");
+  const hasKey=()=>!!localStorage.getItem("crm_ak");
 
   document.getElementById("show-key-btn")?.addEventListener("click",()=>{
     document.getElementById("key-banner")?.classList.add("hidden");
@@ -439,14 +423,14 @@ function bindInput(){
     document.getElementById("key-input")?.focus();
   });
   document.getElementById("del-key-btn")?.addEventListener("click",()=>{
-    localStorage.removeItem("crm_gk");
+    localStorage.removeItem("crm_ak");
     showToast("APIキーを削除しました");
     navigate("input");
   });
   document.getElementById("save-key-btn")?.addEventListener("click",()=>{
     const k=document.getElementById("key-input")?.value.trim();
     if(!k)return;
-    localStorage.setItem("crm_gk",k);
+    localStorage.setItem("crm_ak",k);
     showToast("APIキーを保存しました");
     navigate("input");
   });
@@ -497,7 +481,7 @@ function bindInput(){
     btn.disabled=true;
     btn.innerHTML='<span class="spin"></span>解析中…';
     try{
-      const parsed=await callGemini(memo);
+      const parsed=await callAI(memo);
       parsedData=parsed;origMemo=memo;
       navigate("input","confirm");
     }catch(e){
