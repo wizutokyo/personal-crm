@@ -204,7 +204,7 @@ async function callGemini(memo){
   const key=localStorage.getItem("crm_gk");
   if(!key)throw new Error("APIキーが設定されていません");
   // gemini-2.0-flash-lite: 無料・安定版
-  const MODELS=["gemini-2.0-flash-lite","gemini-1.5-flash","gemini-1.5-flash-latest"];
+  const MODELS=["gemini-2.0-flash-lite","gemini-2.0-flash","gemini-1.5-flash"];
   let lastErr=null;
   for(const model of MODELS){
     try{
