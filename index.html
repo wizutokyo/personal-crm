@@ -168,7 +168,10 @@ let origMemo="";
 // ============================================================
 // UTILS
 // ============================================================
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function uid(){
+  if(typeof crypto!=="undefined"&&crypto.randomUUID)return crypto.randomUUID();
+  return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&0x3|0x8)).toString(16)});
+}
 function cst(p){
   if(p.status==="completed")return"completed";
   if(p.status==="archived")return"archived";

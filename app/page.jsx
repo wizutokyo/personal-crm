@@ -94,7 +94,13 @@ function exportCSV(people, referrals) {
   document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+function uid() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
 
 function computeStatus(person) {
   if (person.status === "completed") return "completed";
