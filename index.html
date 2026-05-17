@@ -200,21 +200,41 @@ function buildPrompt(memo){
 async function callGemini(memo){
   const key=localStorage.getItem("crm_gk");
   if(!key)throw new Error("APIキーが設定されていません");
-  const MODELS=["gemini-2.0-flash-lite","gemini-2.0-flash","gemini-1.5-flash"];
+  // v1とv1betaの両エンドポイント×複数モデルを順番に試す
+  const TRIES=[
+    {api:"v1",model:"gemini-2.0-flash"},
+    {api:"v1beta",model:"gemini-2.0-flash-lite"},
+    {api:"v1",model:"gemini-1.5-flash"},
+    {api:"v1beta",model:"gemini-1.5-flash"},
+    {api:"v1beta",model:"gemini-1.5-flash-8b"},
+  ];
   let lastErr=null;
-  for(const model of MODELS){
+  for(const{api,model}of TRIES){
     try{
-      const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
-      const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{responseMimeType:"application/json",temperature:0.1}})});
-      if(!res.ok){const e=await res.json().catch(()=>({}));const msg=e?.error?.message||`HTTP ${res.status}`;if(res.status===429||res.status===503){throw new Error(msg)}lastErr=new Error(msg);continue;}
+      const url=`https://generativelanguage.googleapis.com/${api}/models/${model}:generateContent?key=${key}`;
+      const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],
+          generationConfig:{temperature:0.1}})});
+      if(!res.ok){
+        const e=await res.json().catch(()=>({}));
+        const msg=e?.error?.message||`HTTP ${res.status}`;
+        if(res.status===429||res.status===503)throw new Error(msg);
+        lastErr=new Error(`[${model}] ${msg}`);continue;
+      }
       const d=await res.json();
       const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
-      if(!t)throw new Error("AIからの応答が空でした");
-      try{return JSON.parse(t.replace(/```json|```/g,"").trim());}
-      catch{return{};}
-    }catch(e){lastErr=e;if(e.message.includes("429")||e.message.includes("RESOURCE_EXHAUSTED")||e.message.includes("503"))throw e;}
+      if(!t){lastErr=new Error(`[${model}] 応答が空`);continue;}
+      try{
+        const clean=t.replace(/```json|```/g,"").trim();
+        const j=clean.startsWith("{")? clean : clean.substring(clean.indexOf("{"),clean.lastIndexOf("}")+1);
+        return JSON.parse(j);
+      }catch{return{};}
+    }catch(e){
+      lastErr=e;
+      if(e.message.includes("429")||e.message.includes("RESOURCE_EXHAUSTED")||e.message.includes("503"))throw e;
+    }
   }
-  throw lastErr||new Error("全モデルで解析に失敗しました");
+  throw lastErr||new Error("全モデルで解析に失敗しました。APIキーを確認してください。");
 }
 
 // ============================================================
