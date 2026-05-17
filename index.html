@@ -168,10 +168,7 @@ let origMemo="";
 // ============================================================
 // UTILS
 // ============================================================
-function uid(){
-  if(typeof crypto!=="undefined"&&crypto.randomUUID)return crypto.randomUUID();
-  return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&0x3|0x8)).toString(16)});
-}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
 function cst(p){
   if(p.status==="completed")return"completed";
   if(p.status==="archived")return"archived";
@@ -203,8 +200,7 @@ function buildPrompt(memo){
 async function callGemini(memo){
   const key=localStorage.getItem("crm_gk");
   if(!key)throw new Error("APIキーが設定されていません");
-  // gemini-2.0-flash-lite: 無料・安定版
-  const MODELS=["gemini-2.0-flash-lite","gemini-1.5-flash","gemini-1.5-flash-latest"];
+  const MODELS=["gemini-2.0-flash-lite","gemini-2.0-flash","gemini-1.5-flash"];
   let lastErr=null;
   for(const model of MODELS){
     try{
@@ -215,9 +211,7 @@ async function callGemini(memo){
       const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
       if(!t)throw new Error("AIからの応答が空でした");
       try{return JSON.parse(t.replace(/```json|```/g,"").trim());}
-      catch{// JSONパース失敗時は空オブジェクトで手動入力へフォールバック
-        console.warn("JSON parse failed, falling back to manual",t);
-        return {};}
+      catch{return{};}
     }catch(e){lastErr=e;if(e.message.includes("429")||e.message.includes("RESOURCE_EXHAUSTED")||e.message.includes("503"))throw e;}
   }
   throw lastErr||new Error("全モデルで解析に失敗しました");
@@ -404,6 +398,7 @@ function renderInput(){
         <span style="font-size:11px;color:var(--dim)">${hasKey?"AIで自動解析 または Claude.aiを使う":"↑ APIキーを設定してください"}</span>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btng" id="claude-btn" style="font-size:12px">Claude.aiで解析 →</button>
+          <button class="btn" id="test-btn" style="background:#22c55e">テスト保存</button>
           <button class="btn" id="ai-btn" ${!hasKey?"disabled":""}>✦ AIで整理する</button>
         </div>
       </div>
@@ -452,6 +447,24 @@ function bindInput(){
   });
 
   document.getElementById("claude-btn")?.addEventListener("click",()=>{
+    document.getElementById("test-btn")?.addEventListener("click",async()=>{
+    const f={
+     name:"テスト太郎",
+     met_date:"2025-05-01",
+     met_place:"渋谷",
+     age:25,
+     gender:"male",
+     occupation:"営業",
+     residence:"高井戸",
+     referral_types:["beauty_salon"],
+     next_action:"連絡する",
+     next_action_due:"2025-06-01",
+     has_meeting:false,
+     is_friend:false,
+  };
+  const ok=await savePerson(f);
+  if(ok)alert("保存成功！");
+});
     const memo=document.getElementById("memo-input")?.value.trim();
     if(!memo){showToast("メモを入力してください","err");return}
     navigator.clipboard.writeText(buildPrompt(memo)).then(()=>{
@@ -474,10 +487,8 @@ function bindInput(){
       navigate("input","confirm");
     }catch(e){
       const m=e.message||"";
-      if(m.includes("429")||m.includes("RESOURCE_EXHAUSTED"))showToast("本日の無料枠に達しました（1日1500回まで）。明日リセットされます。","err");
-      else if(m.includes("APIキー"))showToast("APIキーが未設定です。上の欄から入力してください。","err");
-      else if(m.includes("503")||m.includes("overloaded"))showToast("AIサーバーが混雑中です。しばらくしてから再試行してください。","err");
-      else showToast("解析エラー: "+m+" — 手動入力で続けることもできます","err");
+      if(m.includes("429")||m.includes("RESOURCE_EXHAUSTED"))showToast("本日の無料枠に達しました。明日リセットされます。","err");
+      else showToast("解析エラー: "+m,"err");
       btn.disabled=false;btn.innerHTML="✦ AIで整理する";
     }
   });
