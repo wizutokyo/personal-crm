@@ -197,44 +197,39 @@ function buildPrompt(memo){
   return`以下のメモから人物情報を抽出し、JSONのみ返してください。説明文不要。\n\n今日: ${today}（年省略時は${year}年で補完）\n\nJSONスキーマ（不明はnull）:\n{\n  "name":string|null,"met_date":"YYYY-MM-DD"|null,"met_place":string|null,\n  "age":number|null,"gender":"male"|"female"|"other"|null,\n  "occupation":string|null,"residence":string|null,"university":string|null,\n  "hometown":string|null,"family_structure":string|null,"conversation":string|null,\n  "referral_types":["beauty_salon"|"hr"|"real_estate"|"book"|"person"],\n  "next_action":string|null,"next_action_due":"YYYY-MM-DD"|null,\n  "has_meeting":false,"meeting_date":"YYYY-MM-DD"|null,\n  "is_friend":false,"friended_date":"YYYY-MM-DD"|null,"notes":string|null\n}\n\n送客先: 美容院→beauty_salon, 転職/就職→hr, 不動産→real_estate, 本→book, 人紹介→person\n\nメモ:\n${memo}`;
 }
 
+// APIキーで使えるモデルを��動検出
+async function findModel(key){
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+  if(!r.ok){
+    const e=await r.json().catch(()=>({}));
+    const msg=e?.error?.message||`HTTP ${r.status}`;
+    if(r.status===400||r.status===401||r.status===403)throw new Error("APIキーが無効です: "+msg);
+    throw new Error(msg);
+  }
+  const d=await r.json();
+  const list=(d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace("models/",""));
+  const prefer=["gemini-2.0-flash","gemini-1.5-flash","gemini-2.0-flash-lite","gemini-1.5-flash-8b"];
+  for(const p of prefer){const m=list.find(n=>n.startsWith(p));if(m)return m;}
+  if(list.length>0)return list[0];
+  throw new Error("このAPIキーで使えるモデルが見つかりません");
+}
+
 async function callGemini(memo){
   const key=localStorage.getItem("crm_gk");
   if(!key)throw new Error("APIキーが設定されていません");
-  // v1とv1betaの両エンドポイント×複数モデルを順番に試す
-  const TRIES=[
-    {api:"v1",model:"gemini-2.0-flash"},
-    {api:"v1beta",model:"gemini-2.0-flash-lite"},
-    {api:"v1",model:"gemini-1.5-flash"},
-    {api:"v1beta",model:"gemini-1.5-flash"},
-    {api:"v1beta",model:"gemini-1.5-flash-8b"},
-  ];
-  let lastErr=null;
-  for(const{api,model}of TRIES){
-    try{
-      const url=`https://generativelanguage.googleapis.com/${api}/models/${model}:generateContent?key=${key}`;
-      const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],
-          generationConfig:{temperature:0.1}})});
-      if(!res.ok){
-        const e=await res.json().catch(()=>({}));
-        const msg=e?.error?.message||`HTTP ${res.status}`;
-        if(res.status===429||res.status===503)throw new Error(msg);
-        lastErr=new Error(`[${model}] ${msg}`);continue;
-      }
-      const d=await res.json();
-      const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
-      if(!t){lastErr=new Error(`[${model}] 応答が空`);continue;}
-      try{
-        const clean=t.replace(/```json|```/g,"").trim();
-        const j=clean.startsWith("{")? clean : clean.substring(clean.indexOf("{"),clean.lastIndexOf("}")+1);
-        return JSON.parse(j);
-      }catch{return{};}
-    }catch(e){
-      lastErr=e;
-      if(e.message.includes("429")||e.message.includes("RESOURCE_EXHAUSTED")||e.message.includes("503"))throw e;
-    }
-  }
-  throw lastErr||new Error("全モデルで解析に失敗しました。APIキーを確認してください。");
+  const model=await findModel(key);
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{temperature:0.1}})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`);}
+  const d=await res.json();
+  const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
+  if(!t)throw new Error("AIの応���が空でした");
+  try{
+    const clean=t.replace(/```json|```/g,"").trim();
+    const j=clean.startsWith("{")? clean : clean.substring(clean.indexOf("{"),clean.lastIndexOf("}")+1);
+    return JSON.parse(j);
+  }catch{return{};}
 }
 
 // ============================================================
