@@ -203,12 +203,24 @@ function buildPrompt(memo){
 async function callGemini(memo){
   const key=localStorage.getItem("crm_gk");
   if(!key)throw new Error("APIキーが設定されていません");
-  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${key}`;
-  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{responseMimeType:"application/json"}})});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`)}
-  const d=await res.json();
-  const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
-  return JSON.parse(t.replace(/```json|```/g,"").trim());
+  // gemini-2.0-flash-lite: 無料・安定版
+  const MODELS=["gemini-2.0-flash-lite","gemini-1.5-flash","gemini-1.5-flash-latest"];
+  let lastErr=null;
+  for(const model of MODELS){
+    try{
+      const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+      const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:buildPrompt(memo)}]}],generationConfig:{responseMimeType:"application/json",temperature:0.1}})});
+      if(!res.ok){const e=await res.json().catch(()=>({}));const msg=e?.error?.message||`HTTP ${res.status}`;if(res.status===429||res.status===503){throw new Error(msg)}lastErr=new Error(msg);continue;}
+      const d=await res.json();
+      const t=d?.candidates?.[0]?.content?.parts?.[0]?.text||"";
+      if(!t)throw new Error("AIからの応答が空でした");
+      try{return JSON.parse(t.replace(/```json|```/g,"").trim());}
+      catch{// JSONパース失敗時は空オブジェクトで手動入力へフォールバック
+        console.warn("JSON parse failed, falling back to manual",t);
+        return {};}
+    }catch(e){lastErr=e;if(e.message.includes("429")||e.message.includes("RESOURCE_EXHAUSTED")||e.message.includes("503"))throw e;}
+  }
+  throw lastErr||new Error("全モデルで解析に失敗しました");
 }
 
 // ============================================================
@@ -462,8 +474,10 @@ function bindInput(){
       navigate("input","confirm");
     }catch(e){
       const m=e.message||"";
-      if(m.includes("429")||m.includes("RESOURCE_EXHAUSTED"))showToast("本日の無料枠に達しました。明日リセットされます。","err");
-      else showToast("解析エラー: "+m,"err");
+      if(m.includes("429")||m.includes("RESOURCE_EXHAUSTED"))showToast("本日の無料枠に達しました（1日1500回まで）。明日リセットされます。","err");
+      else if(m.includes("APIキー"))showToast("APIキーが未設定です。上の欄から入力してください。","err");
+      else if(m.includes("503")||m.includes("overloaded"))showToast("AIサーバーが混雑中です。しばらくしてから再試行してください。","err");
+      else showToast("解析エラー: "+m+" — 手動入力で続けることもできます","err");
       btn.disabled=false;btn.innerHTML="✦ AIで整理する";
     }
   });
