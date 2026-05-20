@@ -131,6 +131,7 @@ textarea.inp{resize:vertical;line-height:1.7}
   <button class="nb" data-page="input">+ 新規入力</button>
   <button class="nb" data-page="people">⊞ 人物一覧</button>
   <button class="nb" data-page="actions">◎ アクション <span class="bdg hidden" id="od-badge">0</span></button>
+  <button class="nb" data-page="settings">⚙ 設定</button>
 </nav>
 
 <main id="main"></main>
@@ -247,6 +248,23 @@ async function callAI(memo){
 }
 
 // ============================================================
+// GOOGLE SHEETS SYNC
+// ============================================================
+function sheetsRow(person){
+  const GL={male:"男性",female:"女性",other:"その他"};
+  const pRefs=refs.filter(r=>r.person_id===person.id).map(r=>({beauty_salon:"美容院",hr:"人材",real_estate:"不動産",book:"本紹介",person:"人紹介"})[r.referral_type]||r.referral_type).join("|");
+  return[person.id,person.name,person.met_date||"",person.met_place||"",person.age||"",GL[person.gender]||"",person.occupation||"",person.residence||"",person.university||"",person.hometown||"",person.family_structure||"",person.conversation||"",pRefs,person.next_action||"",person.next_action_due||"",person.next_action_done?"完了":"未完了",person.has_meeting?"あり":"なし",person.meeting_date||"",person.is_friend?"済み":"未",person.friended_date||"",person.status||"active",person.notes||"",person.updated_at||""];
+}
+
+async function syncToSheets(action,payload){
+  const url=localStorage.getItem("crm_sheets_url");
+  if(!url)return;
+  try{
+    await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,...payload})});
+  }catch(e){console.warn("Sheets sync:",e);}
+}
+
+// ============================================================
 // DATA
 // ============================================================
 async function loadData(){
@@ -273,6 +291,7 @@ async function savePerson(f){
   }
   people=[{...person},...people];
   refs=[...refs,...(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type}))];
+  syncToSheets("upsert",{row:sheetsRow({...person,referral_types:f.referral_types||[]})});
   showToast(f.name+"を登録しました");
   return true;
 }
@@ -286,6 +305,8 @@ async function updatePerson(id,f){
   }
   people=people.map(p=>p.id!==id?p:{...p,...updated});
   refs=[...refs.filter(r=>r.person_id!==id),...(f.referral_types||[]).map(type=>({id:uid(),person_id:id,referral_type:type}))];
+  const syncPerson=people.find(p=>p.id===id)||{id,...updated};
+  syncToSheets("upsert",{row:sheetsRow({...syncPerson,referral_types:f.referral_types||[]})});
   showToast("保存しました");
 }
 
@@ -328,6 +349,7 @@ function render(){
   if(currentPage==="input"){main.innerHTML=renderInput();bindInput();return}
   if(currentPage==="people"){main.innerHTML=renderPeople();bindPeople();return}
   if(currentPage==="actions"){main.innerHTML=renderActions();bindActions();return}
+  if(currentPage==="settings"){main.innerHTML=renderSettings();bindSettings();return}
 }
 
 // ============================================================
@@ -972,6 +994,118 @@ function bindActions(){
       await toggleNA(btn.dataset.pid);
       updateBadge();render();
     });
+  });
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function renderSettings(){
+  const sheetsUrl=localStorage.getItem("crm_sheets_url")||"";
+  const ak=localStorage.getItem("crm_ak")||"";
+  return`<div class="page">
+<div class="page-title">⚙ 設定</div>
+<div class="page-sub">APIキーとGoogle Sheets連携を設定</div>
+
+<div class="card">
+  <div class="card-title">AI設定</div>
+  <label class="lbl">APIキー</label>
+  <input id="s-ak" class="inp" type="password" placeholder="gsk_... (Groq) / sk-ant-... (Claude) / sk-... (OpenAI)" value="${ak}">
+  <div style="font-size:11px;color:var(--mu);margin-top:6px">Groq: <a href="https://console.groq.com" target="_blank">console.groq.com</a> で無料取得（14,400回/日）</div>
+  <div class="btn-row"><button class="btn" id="s-ak-save">保存</button></div>
+</div>
+
+<div class="card">
+  <div class="card-title">Google Sheets 自動同期</div>
+  <label class="lbl">Apps Script Web App URL</label>
+  <input id="s-sheets" class="inp" type="url" placeholder="https://script.google.com/macros/s/..." value="${sheetsUrl}">
+  <div style="font-size:11px;color:var(--mu);margin-top:6px">Google スプレッドシートにApps Scriptを設定してURLを貼り付けてください</div>
+  <div class="btn-row">
+    <button class="btng" id="s-sheets-test">接続テスト</button>
+    <button class="btn" id="s-sheets-save">保存</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">一括同期</div>
+  <div style="font-size:13px;color:var(--mu);margin-bottom:12px">現在の全データをGoogle Sheetsへ送信します</div>
+  <button class="btn" id="s-bulk-sync">全データを同期 (${people.length}件)</button>
+</div>
+
+<div class="card">
+  <div class="card-title">Google Apps Script コード</div>
+  <div style="font-size:11px;color:var(--mu);margin-bottom:8px">下記をコピーしてGoogle スプレッドシートの「拡張機能→Apps Script」に貼り付け、デプロイしてください</div>
+  <textarea class="inp" rows="12" readonly id="s-gas-code" style="font-size:10px;font-family:monospace;color:var(--mu)">${gasCode()}</textarea>
+  <div class="btn-row"><button class="btng" id="s-gas-copy">コードをコピー</button></div>
+</div>
+</div>`;
+}
+
+function gasCode(){
+  return`function doPost(e){
+  var data=JSON.parse(e.postData.contents);
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  var sh=ss.getSheetByName("CRM")||ss.insertSheet("CRM");
+  if(sh.getLastRow()===0){
+    sh.appendRow(["ID","名前","出会日","場所","年齢","性別","職業","居住地","大学","出身地","家族構成","会話内容","送客種別","ネクストアクション","期限","NA完了","面談","面談日","友達化","友達化日","ステータス","メモ","更新日時"]);
+  }
+  if(data.action==="upsert"&&data.row){
+    var id=data.row[0];
+    var found=false;
+    var last=sh.getLastRow();
+    for(var i=2;i<=last;i++){
+      if(sh.getRange(i,1).getValue()===id){sh.getRange(i,1,1,data.row.length).setValues([data.row]);found=true;break;}
+    }
+    if(!found)sh.appendRow(data.row);
+  }
+  if(data.action==="bulk"&&data.rows){
+    data.rows.forEach(function(row){
+      var id=row[0];var found=false;
+      var last=sh.getLastRow();
+      for(var i=2;i<=last;i++){
+        if(sh.getRange(i,1).getValue()===id){sh.getRange(i,1,1,row.length).setValues([row]);found=true;break;}
+      }
+      if(!found)sh.appendRow(row);
+    });
+  }
+  return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+}`.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function bindSettings(){
+  document.getElementById("s-ak-save").addEventListener("click",()=>{
+    const v=document.getElementById("s-ak").value.trim();
+    localStorage.setItem("crm_ak",v);
+    showToast("APIキーを保存しました");
+  });
+  document.getElementById("s-sheets-save").addEventListener("click",()=>{
+    const v=document.getElementById("s-sheets").value.trim();
+    localStorage.setItem("crm_sheets_url",v);
+    showToast("URLを保存しました");
+  });
+  document.getElementById("s-sheets-test").addEventListener("click",async()=>{
+    const url=document.getElementById("s-sheets").value.trim();
+    if(!url){showToast("URLを入力してください","err");return}
+    try{
+      await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"test"})});
+      showToast("接続テスト送信完了（no-corsのため結果は確認できません）");
+    }catch(e){showToast("接続エラー: "+e.message,"err");}
+  });
+  document.getElementById("s-bulk-sync").addEventListener("click",async()=>{
+    const url=localStorage.getItem("crm_sheets_url");
+    if(!url){showToast("先にSheets URLを設定してください","err");return}
+    const rows=people.map(p=>{
+      const pRefs=refs.filter(r=>r.person_id===p.id).map(r=>r.referral_type);
+      return sheetsRow({...p,referral_types:pRefs});
+    });
+    try{
+      await fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"bulk",rows})});
+      showToast(`${rows.length}件を同期しました`);
+    }catch(e){showToast("同期エラー: "+e.message,"err");}
+  });
+  document.getElementById("s-gas-copy").addEventListener("click",()=>{
+    const code=document.getElementById("s-gas-code").value;
+    navigator.clipboard.writeText(code).then(()=>showToast("コードをコピーしました")).catch(()=>showToast("コピー失敗","err"));
   });
 }
 
